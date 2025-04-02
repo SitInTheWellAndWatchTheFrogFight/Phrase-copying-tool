@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>短语复制工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    * {
+      background-color: darkred;
+    }
+
+    h1 {
+      text-align: center;
+      color: aqua;
+      font-size: 36px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      font-size: 24px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      color: burlywood;
+      border: none;
+      background: transparent;
+      font-size: 24px;
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+
+    button {
+      font-size: 24px;
+      padding: 5px 10px;
+      background-color: #38b2ac;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+      button:hover {
+        background-color: #2c7a7b;
+      }
+    /* 新增样式，用于标 this.previousElementSibling.classList.add('copied')记已复制的文本 */
+    .copied {
+      text-decoration: line-through;
+      text-decoration-color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>短语复制工具</h1>
+  <ul start="1">
+    <li>
+      1.
+      <input type="text" value="愚人节快乐" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 1'">复制 1</button>
+    </li>
+    <li>
+      2.
+      <input type="text" value="开心一刻愚你同乐" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 2'">复制 2</button>
+    </li>
+    <li>
+      3.
+      <input type="text" value="愚人整蛊笑口常开" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 3'">复制 3</button>
+    </li>
+    <li>
+      4.
+      <input type="text" value="整蛊无限乐翻天" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 4'">复制 4</button>
+    </li>
+    <li>
+      5.
+      <input type="text" value="愚人节让我看看谁是整蛊专家" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 5'">复制 5</button>
+    </li>
+    <li>
+      6.
+      <input type="text" value="愚人节到大家肯定想说真心话" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 6'">复制 6</button>
+    </li>
+    <li>
+      7.
+      <input type="text" value="祝大家今天的真心话玩笑都有肯定回答" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 7'">复制 7</button>
+    </li>
+    <li>
+      8.
+      <input type="text" value="保持警惕小心被愚" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 8'">复制 8</button>
+    </li>
+    <li>
+      9.
+      <input type="text" value="祝天下愚人大智若愚" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 9'">复制 9</button>
+    </li>
+    <li>
+      10.
+      <input type="text" value="谢谢你对我的信任" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 10'">复制 10</button>
+    </li>
+    <li>
+      11.
+      <input type="text" value="我只想把最真诚的送给你" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 11'">复制 11</button>
+    </li>
+    <li>
+      12.
+      <input type="text" value="愚人节请你做一天愚人" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 12'">复制 12</button>
+    </li>
+    <li>
+      13.
+      <input type="text" value="烦恼忧愁全忘记" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 13'">复制 13</button>
+    </li>
+    <li>
+      14.
+      <input type="text" value="糊涂未偿不可以" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 14'">复制 14</button>
+    </li>
+    <li>
+      15.
+      <input type="text" value="祝你愚人节过得精彩" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 15'">复制 15</button>
+    </li>
+    <li>
+      16.
+      <input type="text" value="愚人节与君同乐" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 16'">复制 16</button>
+    </li>
+    <li>
+      17.
+      <input type="text" value="祝生活游刃有愚" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 17'">复制 17</button>
+    </li>
+    <li>
+      18.
+      <input type="text" value="今天是个快乐的节日" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 18'">复制 18</button>
+    </li>
+    <li>
+      19.
+      <input type="text" value="愿你天天都能笑口常开" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 19'">复制 19</button>
+    </li>
+    <li>
+      20.
+      <input type="text" value="愚人节愿你生活如愚得水" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 20'">复制 20</button>
+    </li>
+    <li>
+      21.
+      <input type="text" value="能力绰绰有愚" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 21'">复制 21</button>
+    </li>
+    <li>
+      22.
+      <input type="text" value="财富月月有愚" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 22'">复制 22</button>
+    </li>
+    <li>
+      23.
+      <input type="text" value="做事不遗愚力" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 23'">复制 23</button>
+    </li>
+    <li>
+      24.
+      <input type="text" value="饮食愚味无穷" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 24'">复制 24</button>
+    </li>
+    <li>
+      25.
+      <input type="text" value="茶愚饭后谈笑风生" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 25'">复制 25</button>
+    </li>
+    <li>
+      26.
+      <input type="text" value="烦恼愚消云散" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 26'">复制 26</button>
+    </li>
+    <li>
+      27.
+      <input type="text" value="愚人节自愚自乐" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 27'">复制 27</button>
+    </li>
+    <li>
+      28.
+      <input type="text" value="不如愚你同乐" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 28'">复制 28</button>
+    </li>
+    <li>
+      29.
+      <input type="text" value="愿你收入年年有愚" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 29'">复制 29</button>
+    </li>
+    <li>
+      30.
+      <input type="text" value="心情天天愚快" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 30'">复制 30</button>
+    </li>
+    <li>
+      31.
+      <input type="text" value="财富愚日俱增" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 31'">复制 31</button>
+    </li>
+    <li>
+      32.
+      <input type="text" value="愚人节日开启四月的好运气" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 32'">复制 32</button>
+    </li>
+    <li>
+      33.
+      <input type="text" value="祝你福运满满" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 33'">复制 33</button>
+    </li>
+    <li>
+      34.
+      <input type="text" value="福气充满整个四月" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 34'">复制 34</button>
+    </li>
+    <li>
+      35.
+      <input type="text" value="借愚人节的机会好好放松" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 35'">复制 35</button>
+    </li>
+    <li>
+      36.
+      <input type="text" value="愚人节希望我能让你开怀大笑" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 36'">复制 36</button>
+    </li>
+    <li>
+      37.
+      <input type="text" value="愚人节可不许真的骗我" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 37'">复制 37</button>
+    </li>
+    <li>
+      38.
+      <input type="text" value="我读书多你是骗不了我的" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 38'">复制 38</button>
+    </li>
+    <li>
+      39.
+      <input type="text" value="愚人节当然要愉快度过啦" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 39'">复制 39</button>
+    </li>
+    <li>
+      40.
+      <input type="text" value="愚人节祝你永远天真" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 40'">复制 40</button>
+    </li>
+    <li>
+      41.
+      <input type="text" value="愚人节祝你永远拥有快乐心情" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 41'">复制 41</button>
+    </li>
+    <li>
+      42.
+      <input type="text" value="愚人节我可以骗你的心吗" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 42'">复制 42</button>
+    </li>
+    <li>
+      43.
+      <input type="text" value="有些谎言也可以很动听" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 43'">复制 43</button>
+    </li>
+    <li>
+      44.
+      <input type="text" value="愿你做个愚人烦恼少少" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 44'">复制 44</button>
+    </li>
+    <li>
+      45.
+      <input type="text" value="若被人愚微微一笑" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 45'">复制 45</button>
+    </li>
+    <li>
+      46.
+      <input type="text" value="祝大家的生活像花一样灿烂" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 46'">复制 46</button>
+    </li>
+    <li>
+      47.
+      <input type="text" value="祝你每天都有好心情" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 47'">复制 47</button>
+    </li>
+    <li>
+      48.
+      <input type="text" value="娱人不愚人" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 48'">复制 48</button>
+    </li>
+    <li>
+      49.
+      <input type="text" value="请大家放开心胸被愚乐" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 49'">复制 49</button>
+    </li>
+    <li>
+      50.
+      <input type="text" value="愚人节给我一个真话的机会" readonly>
+      <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 50'">复制 50</button>
+    </li>
+  </ul>
+</body>
+</html>    
