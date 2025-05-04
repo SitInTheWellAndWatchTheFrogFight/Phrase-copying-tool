@@ -6,42 +6,91 @@
   <title>短语复制工具</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      padding: 0;
+      background: black;
+      margin: 0;
     }
-
-    * {
-      background-color: cornsilk;
+  
+    canvas {
+      position: fixed;
+      width: 100%;
+      height: 100%;
     }
-
+  
+    /** * {
+            background-color: cornsilk;
+          }*/
+  
     h1 {
       text-align: center;
       color: aqua;
       font-size: 36px;
     }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
+  
+    div {
+      position: relative;
+      text-align: center;
+      z-index: 100;
+      color: aliceblue;
       font-size: 1em;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
+      animation: move-From 500ms ease 1 normal none paused;
     }
-
+  
     input[type="text"] {
       color: chocolate;
       border: none;
-      background: transparent;
       font-size: 1em;
       flex-grow: 1;
       margin-right: 10px;
+  
+      background: -webkit-linear-gradient(135deg,
+          #0eaf6d,
+          #ff6ac6 25%,
+          #147b96 50%,
+          #e6d205 55%,
+          #2cc4e0 60%,
+          #8b2ce0 80%,
+          #ff6384 95%,
+          #08dfb4);
+      /* 文字颜色填充设置为透明 */
+      -webkit-text-fill-color: transparent;
+      /* 背景裁剪，即让文字使用背景色 */
+      -webkit-background-clip: text;
+      /* 背景图放大一下，看着柔和一些 */
+      -webkit-background-size: 200% 100%;
+      /* 应用动画flowCss 12秒速度 无限循环 线性匀速动画*/
+      -webkit-animation: flowCss 12s infinite linear;
     }
-
+  
+    @-webkit-keyframes flowCss {
+      0% {
+        /* 移动背景位置 */
+        background-position: 0 0;
+      }
+  
+      100% {
+        background-position: -400% 0;
+      }
+    }
+  
+    input[type="text"]:hover {
+      -webkit-animation: flowCss 4s infinite linear;
+    }
+  
+    svg {
+      position: relative;
+      right: 10px;
+      width: 20px;
+      height: 3em;
+      z-index: 1000;
+    }
+  
     button {
+      position: relative;
       font-size: 1em;
       padding: 5px 10px;
       background-color: #38b2ac;
@@ -49,72 +98,400 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      z-index: 500;
     }
-
-      button:hover {
-        background-color: #2c7a7b;
-      }
+  
+    button:hover {
+      background-color: #2c7a7b;
+    }
+  
     /* 新增样式，用于标 this.previousElementSibling.classList.add('copied')记已复制的文本 */
     .copied {
       text-decoration: line-through;
       text-decoration-color: red;
+      animation: move-From 500ms ease 1 normal none running;
+    }
+  
+    @keyframes move-From {
+      0% {
+        transform: translateX(100%);
+      }
+  
+      100% {
+        transform: translateX(0);
+      }
+    }
+  
+    /** 当用户点击复制按钮时，触发动画 */
+    .wrap {
+      margin: 120px 0 0 240px;
+      width: 75px;
+      height: 75px;
+      position: fixed;
+      top: 50%;
+      right: 50%;
+      /* transform-origin: 设置的效果搭配边框看，效果更加明显 */
+      /* border: 1px solid #e9e9e9; */
+    }
+  
+    .round {
+      /** 隐藏动画 */
+      display: none;
+  
+      position: fixed;
+      top: -200%;
+      right: 100%;
+      ;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background-color: rgb(241, 141, 157);
+      /* 加上动画效果 */
+      animation: circleRound 2.8s ease infinite running;
+      /* 设置旋转中心，搭配.wrap的border看 */
+      transform-origin: 50% 75px;
+    }
+  
+    /* 注意z-index层级关系，依次递减 */
+    .round:nth-child(1) {
+      z-index: 7;
+    }
+  
+    /* 注意动画延后animation-delay播放，依次递增 */
+    /* 至于小圆球则越来越小 */
+    .round:nth-child(2) {
+      height: 12px;
+      width: 12px;
+      background-color: rgb(199, 136, 185);
+      animation-delay: .2s;
+      z-index: 6;
+    }
+  
+    .round:nth-child(3) {
+      height: 11px;
+      width: 11px;
+      background-color: rgb(153, 69, 223);
+      animation-delay: .4s;
+      z-index: 5;
+    }
+  
+    .round:nth-child(4) {
+      height: 10px;
+      width: 10px;
+      background-color: rgb(69, 141, 223);
+      animation-delay: .6s;
+      z-index: 4;
+    }
+  
+    .round:nth-child(5) {
+      height: 9px;
+      width: 9px;
+      background-color: rgb(69, 223, 203);
+      animation-delay: .8s;
+      z-index: 3;
+    }
+  
+    .round:nth-child(6) {
+      height: 8px;
+      width: 8px;
+      background-color: rgb(100, 223, 69);
+      animation-delay: 1s;
+      z-index: 2;
+    }
+  
+    .round:nth-child(7) {
+      height: 7px;
+      width: 7px;
+      background-color: rgb(223, 200, 69);
+      animation-delay: 1.2s;
+      z-index: 1;
+    }
+  
+    @keyframes circleRound {
+      to {
+        transform: rotate(1turn);
+      }
     }
   </style>
 </head>
 <body>
+  <canvas id="canvas"></canvas>
   <h1>短语复制工具</h1>
-  <ul start="1">
-      <li> 1.  <input type="text" value="五一鲜花满园" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 1'">复制 1</button> </li>
-      <li> 2.  <input type="text" value="要兴致勃勃地过劳动节呀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 2'">复制 2</button> </li>
-      <li> 3.  <input type="text" value="劳动节辛勤劳动带来果实" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 3'">复制 3</button> </li>
-      <li> 4.  <input type="text" value="劳动节智慧劳动创造无尽财富" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 4'">复制 4</button> </li>
-      <li> 5.  <input type="text" value="劳动节快乐劳动带来美好心情" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 5'">复制 5</button> </li>
-      <li> 6.  <input type="text" value="劳动节请劳逸相结合" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 6'">复制 6</button> </li>
-      <li> 7.  <input type="text" value="憧憬着放假的欢乐" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 7'">复制 7</button> </li>
-      <li> 8.  <input type="text" value="五一的日子轻松自在" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 8'">复制 8</button> </li>
-      <li> 9.  <input type="text" value="祝你劳动节越来越有活力" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 9'">复制 9</button> </li>
-      <li> 10. <input type="text" value="放完假精神满满迎接新的工作" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 10'">复制 10</button> </li>
-      <li> 11. <input type="text" value="雨足高田白" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 11'">复制 11</button> </li>
-      <li> 12. <input type="text" value="披蓑半夜耕" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 12'">复制 12</button> </li>
-      <li> 13. <input type="text" value="人牛力俱尽" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 13'">复制 13</button> </li>
-      <li> 14. <input type="text" value="东方殊未明" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 14'">复制 14</button> </li>
-      <li> 15. <input type="text" value="斜阳照墟落" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 15'">复制 15</button> </li>
-      <li> 16. <input type="text" value="穷巷牛羊归" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 16'">复制 16</button> </li>
-      <li> 17. <input type="text" value="野老念牧童" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 17'">复制 17</button> </li>
-      <li> 18. <input type="text" value="倚杖候荆扉" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 18'">复制 18</button> </li>
-      <li> 19. <input type="text" value="雉雊麦苗秀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 19'">复制 19</button> </li>
-      <li> 20. <input type="text" value="蚕眠桑叶稀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 20'">复制 20</button> </li>
-      <li> 21. <input type="text" value="田夫荷锄至" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 21'">复制 21</button> </li>
-      <li> 22. <input type="text" value="相见语依依" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 22'">复制 22</button> </li>
-      <li> 23. <input type="text" value="即此羡闲逸" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 23'">复制 23</button> </li>
-      <li> 24. <input type="text" value="怅然吟式微" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 24'">复制 24</button> </li>
-      <li> 25. <input type="text" value="种豆南山下" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 25'">复制 25</button> </li>
-      <li> 26. <input type="text" value="草盛豆苗稀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 26'">复制 26</button> </li>
-      <li> 27. <input type="text" value="晨兴理荒秽" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 27'">复制 27</button> </li>
-      <li> 28. <input type="text" value="带月荷锄归" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 28'">复制 28</button> </li>
-      <li> 29. <input type="text" value="道狭草木长" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 29'">复制 29</button> </li>
-      <li> 30. <input type="text" value="タ露沾我衣" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 30'">复制 30</button> </li>
-      <li> 31. <input type="text" value="衣沾不足惜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 31'">复制 31</button> </li>
-      <li> 32. <input type="text" value="但使愿无违" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 32'">复制 32</button> </li>
-      <li> 33. <input type="text" value="荷叶罗裙一色裁" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 33'">复制 33</button> </li>
-      <li> 34. <input type="text" value="芙蓉向脸两边开" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 34'">复制 34</button> </li>
-      <li> 35. <input type="text" value="乱入池中看不见" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 35'">复制 35</button> </li>
-      <li> 36. <input type="text" value="闻歌始觉有人来" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 36'">复制 36</button> </li>
-      <li> 37. <input type="text" value="小园烟草接邻家" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 37'">复制 37</button> </li>
-      <li> 38. <input type="text" value="桑柘阴阴一径斜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 38'">复制 38</button> </li>
-      <li> 39. <input type="text" value="卧读陶诗未终卷" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 39'">复制 39</button> </li>
-      <li> 40. <input type="text" value="又乘微雨去锄瓜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 40'">复制 40</button> </li>
-      <li> 41. <input type="text" value="微雨众卉新" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 41'">复制 41</button> </li>
-      <li> 42. <input type="text" value="一雷惊蛰始" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 42'">复制 42</button> </li>
-      <li> 43. <input type="text" value="田家几日闲" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 43'">复制 43</button> </li>
-      <li> 44. <input type="text" value="耕种从此起" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 44'">复制 44</button> </li>
-      <li> 45. <input type="text" value="呼唤携锄至" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 45'">复制 45</button> </li>
-      <li> 46. <input type="text" value="安排筑圃忙" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 46'">复制 46</button> </li>
-      <li> 47. <input type="text" value="农家且喜春耕足" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 47'">复制 47</button> </li>
-      <li> 48. <input type="text" value="未晓呼儿饭黄犊" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 48'">复制 48</button> </li>
-      <li> 49. <input type="text" value="谁家跃马来探春" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 49'">复制 49</button> </li>
-      <li> 50. <input type="text" value="却笑澜翻啼布谷" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 50'">复制 50</button> </li>
-  </ul>
+  <div> 1.  <input type="text" value="五一鲜花满园" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 1'; hideSvg(1); loadBallSpinning()">复制 1</button> </div>
+  <div> 2.  <input type="text" value="要兴致勃勃地过劳动节呀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 2'; hideSvg(2); loadBallSpinning()">复制 2</button> </div>
+  <div> 3.  <input type="text" value="劳动节辛勤劳动带来果实" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 3'; hideSvg(3); loadBallSpinning()">复制 3</button> </div>
+  <div> 4.  <input type="text" value="劳动节智慧劳动创造无尽财富" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 4'; hideSvg(4); loadBallSpinning()">复制 4</button> </div>
+  <div> 5.  <input type="text" value="劳动节快乐劳动带来美好心情" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 5'; hideSvg(5); loadBallSpinning()">复制 5</button> </div>
+  <div> 6.  <input type="text" value="劳动节请劳逸相结合" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 6'; hideSvg(6); loadBallSpinning()">复制 6</button> </div>
+  <div> 7.  <input type="text" value="憧憬着放假的欢乐" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 7'; hideSvg(7); loadBallSpinning()">复制 7</button> </div>
+  <div> 8.  <input type="text" value="五一的日子轻松自在" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 8'; hideSvg(8); loadBallSpinning()">复制 8</button> </div>
+  <div> 9.  <input type="text" value="祝你劳动节越来越有活力" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 9'; hideSvg(9); loadBallSpinning()">复制 9</button> </div>
+  <div> 10. <input type="text" value="放完假精神满满迎接新的工作" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 10'; hideSvg(10); loadBallSpinning()">复制 10</button> </div>
+  <div> 11. <input type="text" value="雨足高田白" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 11'; hideSvg(11); loadBallSpinning()">复制 11</button> </div>
+  <div> 12. <input type="text" value="披蓑半夜耕" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 12'; hideSvg(12); loadBallSpinning()">复制 12</button> </div>
+  <div> 13. <input type="text" value="人牛力俱尽" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 13'; hideSvg(13); loadBallSpinning()">复制 13</button> </div>
+  <div> 14. <input type="text" value="东方殊未明" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 14'; hideSvg(14); loadBallSpinning()">复制 14</button> </div>
+  <div> 15. <input type="text" value="斜阳照墟落" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 15'; hideSvg(15); loadBallSpinning()">复制 15</button> </div>
+  <div> 16. <input type="text" value="穷巷牛羊归" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 16'; hideSvg(16); loadBallSpinning()">复制 16</button> </div>
+  <div> 17. <input type="text" value="野老念牧童" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 17'; hideSvg(17); loadBallSpinning()">复制 17</button> </div>
+  <div> 18. <input type="text" value="倚杖候荆扉" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 18'; hideSvg(18); loadBallSpinning()">复制 18</button> </div>
+  <div> 19. <input type="text" value="雉雊麦苗秀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 19'; hideSvg(19); loadBallSpinning()">复制 19</button> </div>
+  <div> 20. <input type="text" value="蚕眠桑叶稀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 20'; hideSvg(20); loadBallSpinning()">复制 20</button> </div>
+  <div> 21. <input type="text" value="田夫荷锄至" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 21'; hideSvg(21); loadBallSpinning()">复制 21</button> </div>
+  <div> 22. <input type="text" value="相见语依依" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 22'; hideSvg(22); loadBallSpinning()">复制 22</button> </div>
+  <div> 23. <input type="text" value="即此羡闲逸" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 23'; hideSvg(23); loadBallSpinning()">复制 23</button> </div>
+  <div> 24. <input type="text" value="怅然吟式微" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 24'; hideSvg(24); loadBallSpinning()">复制 24</button> </div>
+  <div> 25. <input type="text" value="种豆南山下" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 25'; hideSvg(25); loadBallSpinning()">复制 25</button> </div>
+  <div> 26. <input type="text" value="草盛豆苗稀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 26'; hideSvg(26); loadBallSpinning()">复制 26</button> </div>
+  <div> 27. <input type="text" value="晨兴理荒秽" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 27'; hideSvg(27); loadBallSpinning()">复制 27</button> </div>
+  <div> 28. <input type="text" value="带月荷锄归" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 28'; hideSvg(28); loadBallSpinning()">复制 28</button> </div>
+  <div> 29. <input type="text" value="道狭草木长" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 29'; hideSvg(29); loadBallSpinning()">复制 29</button> </div>
+  <div> 30. <input type="text" value="タ露沾我衣" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 30'; hideSvg(30); loadBallSpinning()">复制 30</button> </div>
+  <div> 31. <input type="text" value="衣沾不足惜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 31'; hideSvg(31); loadBallSpinning()">复制 31</button> </div>
+  <div> 32. <input type="text" value="但使愿无违" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 32'; hideSvg(32); loadBallSpinning()">复制 32</button> </div>
+  <div> 33. <input type="text" value="荷叶罗裙一色裁" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 33'; hideSvg(33); loadBallSpinning()">复制 33</button> </div>
+  <div> 34. <input type="text" value="芙蓉向脸两边开" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 34'; hideSvg(34); loadBallSpinning()">复制 34</button> </div>
+  <div> 35. <input type="text" value="乱入池中看不见" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 35'; hideSvg(35); loadBallSpinning()">复制 35</button> </div>
+  <div> 36. <input type="text" value="闻歌始觉有人来" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 36'; hideSvg(36); loadBallSpinning()">复制 36</button> </div>
+  <div> 37. <input type="text" value="小园烟草接邻家" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 37'; hideSvg(37); loadBallSpinning()">复制 37</button> </div>
+  <div> 38. <input type="text" value="桑柘阴阴一径斜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 38'; hideSvg(38); loadBallSpinning()">复制 38</button> </div>
+  <div> 39. <input type="text" value="卧读陶诗未终卷" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 39'; hideSvg(39); loadBallSpinning()">复制 39</button> </div>
+  <div> 40. <input type="text" value="又乘微雨去锄瓜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 40'; hideSvg(40); loadBallSpinning()">复制 40</button> </div>
+  <div> 41. <input type="text" value="微雨众卉新" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 41'; hideSvg(41); loadBallSpinning()">复制 41</button> </div>
+  <div> 42. <input type="text" value="一雷惊蛰始" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 42'; hideSvg(42); loadBallSpinning()">复制 42</button> </div>
+  <div> 43. <input type="text" value="田家几日闲" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 43'; hideSvg(43); loadBallSpinning()">复制 43</button> </div>
+  <div> 44. <input type="text" value="耕种从此起" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 44'; hideSvg(44); loadBallSpinning()">复制 44</button> </div>
+  <div> 45. <input type="text" value="呼唤携锄至" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 45'; hideSvg(45); loadBallSpinning()">复制 45</button> </div>
+  <div> 46. <input type="text" value="安排筑圃忙" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 46'; hideSvg(46); loadBallSpinning()">复制 46</button> </div>
+  <div> 47. <input type="text" value="农家且喜春耕足" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 47'; hideSvg(47); loadBallSpinning()">复制 47</button> </div>
+  <div> 48. <input type="text" value="未晓呼儿饭黄犊" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 48'; hideSvg(48); loadBallSpinning()">复制 48</button> </div>
+  <div> 49. <input type="text" value="谁家跃马来探春" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 49'; hideSvg(49); loadBallSpinning()">复制 49</button> </div>
+  <div> 50. <input type="text" value="却笑澜翻啼布谷" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 50'; hideSvg(50); loadBallSpinning()">复制 50</button> </div>
+
+  <div class="wrap">
+    <div class="round"></div>
+    <div class="round"></div>
+    <div class="round"></div>
+    <div class="round"></div>
+    <div class="round"></div>
+    <div class="round"></div>
+    <div class="round"></div>
+  </div>
+
+  <script>
+    /**
+     * 以下是动画效果的JavaScript代码
+     * @param {Element} ElementObject 动画元素的DOM对象
+     * @param {Number} serialNumber 动画元素的序号
+     */
+    function loadSVG(ElementObject, serialNumber) {
+      /** 
+      * 以下是SVG代码，可以直接在HTML中使用，也可以通过JavaScript动态生成的CSS
+      * <svg id="mySvg" viewBox="0 0 100 100">
+      *     <defs>
+      *         <radialGradient id="ballGradient" cx="30%" cy="30%" r="70%">
+      *             <stop offset="0%" stop-color="#FF4444" />
+      *             <stop offset="100%" stop-color="#CC0000" />
+      *         </radialGradient>
+      *     </defs>
+      *     <circle cx="50" cy="50" r="50" fill="url(#ballGradient)" />
+      * </svg>
+      */
+      let newSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      newSVG.id = 'mySvg' + serialNumber;
+      let newAttribs = document.createAttribute('viewBox');
+      newAttribs.value = '0 0 100 100';
+      newSVG.setAttributeNode(newAttribs);
+
+      let newDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      let newRadialGradient = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
+      let newRadialGradientAttribs = document.createAttribute('id');
+      newRadialGradientAttribs.value = 'ballGradient' + serialNumber;
+      newRadialGradient.setAttributeNode(newRadialGradientAttribs);
+      newRadialGradientAttribs = document.createAttribute('cx');
+      newRadialGradientAttribs.value = '30%';
+      newRadialGradient.setAttributeNode(newRadialGradientAttribs);
+      newRadialGradientAttribs = document.createAttribute('cy');
+      newRadialGradientAttribs.value = '30%';
+      newRadialGradient.setAttributeNode(newRadialGradientAttribs);
+      newRadialGradientAttribs = document.createAttribute('r');
+      newRadialGradientAttribs.value = '70%';
+      newRadialGradient.setAttributeNode(newRadialGradientAttribs);
+
+      let newRadialGradientStop1 = document.createElementNS('http://www.w3.org/2000/svg','stop');
+      let newRadialGradientStop1Attribs = document.createAttribute('offset');
+      newRadialGradientStop1Attribs.value = '0%';
+      newRadialGradientStop1.setAttributeNode(newRadialGradientStop1Attribs);
+      newRadialGradientStop1Attribs = document.createAttribute('stop-color');
+      newRadialGradientStop1Attribs.value = '#FF4444';
+      newRadialGradientStop1.setAttributeNode(newRadialGradientStop1Attribs);
+
+      let newRadialGradientStop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+      let newRadialGradientStop2Attribs = document.createAttribute('offset');
+      newRadialGradientStop2Attribs.value = '100%';
+      newRadialGradientStop2.setAttributeNode(newRadialGradientStop2Attribs);
+      newRadialGradientStop2Attribs = document.createAttribute('stop-color');
+      newRadialGradientStop2Attribs.value = '#CC0000';
+      newRadialGradientStop2.setAttributeNode(newRadialGradientStop2Attribs);
+      newRadialGradient.appendChild(newRadialGradientStop1);
+      newRadialGradient.appendChild(newRadialGradientStop2);
+      newDefs.appendChild(newRadialGradient);
+
+      let newCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      let newCircleAttribs = document.createAttribute('cx');
+      newCircleAttribs.value = '10';
+      newCircle.setAttributeNode(newCircleAttribs);
+      newCircleAttribs = document.createAttribute('cy');
+      newCircleAttribs.value = '10';
+      newCircle.setAttributeNode(newCircleAttribs);
+      newCircleAttribs = document.createAttribute('r');
+      newCircleAttribs.value = '10';
+      newCircle.setAttributeNode(newCircleAttribs);
+      newCircleAttribs = document.createAttribute('fill');
+      newCircleAttribs.value = 'url(#ballGradient' + serialNumber + ')';
+      newCircle.setAttributeNode(newCircleAttribs);
+      
+      
+      newSVG.appendChild(newDefs);
+      newSVG.appendChild(newCircle);
+
+      ElementObject.appendChild(newSVG);
+    }
+
+    /**
+     * 隐藏SVG元素的函数
+     * @param {Number} serialNumber - SVG元素的序列号
+     */
+    function hideSvg(serialNumber) {
+      let svg = document.getElementById('mySvg' + serialNumber);
+      // 显示类型为none的元素不会占据任何空间，不会影响布局
+      // svg.style.display = 'none';
+
+      svg.style.transform = 'translate(-1em, 1em)';
+      svg.style.zIndex = -1;
+    }
+
+    function loadBallSpinning(){
+      let ball = document.getElementsByClassName('round');
+      for (let i = 0; i < ball.length; i++) {
+        // 触发小球转圈动画
+        ball[i].style.display = 'block';
+        // 重新隐藏小球转圈动画
+        setTimeout(() => {
+          ball[i].style.display= 'none';
+        }, 1400);
+      }
+    }
+
+    let divLists = document.querySelectorAll('div');
+    let endTime = [];
+    for (let i = 0; i < 50; i++) {
+      endTime.push(i * 100 + 500);
+      divLists[i].style.animation = 'move-From ' + endTime[i] + 'ms ease 1 normal none running';
+      setTimeout(() => { loadSVG(divLists[i], i + 1); }, endTime[i]);
+    }
+
+    // 监听窗口大小变化，重新设置SVG元素位置
+    // window.addEventListener('resize', () => {
+    //   for (let i = 0; i < buttons.length; i++) {
+    //     setSVGPosition(svgs[i], buttons[i]);
+    //   }
+    // });
+
+    const rand = function (min, max) {
+      return Math.random() * (max - min) + min;
+    }
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.addEventListener('resize', function () {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx = canvas.getContext('2d');
+      ctx.globalCompositeOperation = 'lighter';
+    });
+    let backgroundColors = ['#000', '#000'];
+    let colors = [
+      ['#002aff', "#009ff2"],
+      ['#0054ff', '#27e49b'],
+      ['#202bc5', '#873dcc']
+    ];
+    let count = 70;
+    let blur = [12, 70];
+    let radius = [1, 120];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'lighter';
+    let grd = ctx.createLinearGradient(0, canvas.height, canvas.width, 0);
+    grd.addColorStop(0, backgroundColors[0]);
+    grd.addColorStop(1, backgroundColors[1]);
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let items = [];
+    while (count--) {
+      let thisRadius = rand(radius[0], radius[1]);
+      let thisBlur = rand(blur[0], blur[1]);
+      let x = rand(-100, canvas.width + 100);
+      let y = rand(-100, canvas.height + 100);
+      let colorIndex = Math.floor(rand(0, 299) / 100);
+      let colorOne = colors[colorIndex][0];
+      let colorTwo = colors[colorIndex][1];
+      ctx.beginPath();
+      ctx.filter = `blur(${thisBlur}px)`;
+      let grd = ctx.createLinearGradient(x - thisRadius / 2, y - thisRadius / 2, x + thisRadius, y + thisRadius);
+      grd.addColorStop(0, colorOne);
+      grd.addColorStop(1, colorTwo);
+      ctx.fillStyle = grd;
+      ctx.fill();
+      ctx.arc(x, y, thisRadius, 0, Math.PI * 2);
+      ctx.closePath();
+      let directionX = Math.round(rand(-99, 99) / 100);
+      let directionY = Math.round(rand(-99, 99) / 100);
+      items.push({
+        x: x,
+        y: y,
+        blur: thisBlur,
+        radius: thisRadius,
+        initialXDirection: directionX,
+        initialYDirection: directionY,
+        initialBlurDirection: directionX,
+        colorOne: colorOne,
+        colorTwo: colorTwo,
+        gradient: [x - thisRadius / 2, y - thisRadius / 2, x + thisRadius, y + thisRadius],
+      });
+    }
+    function changeCanvas(timestamp) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let adjX = 2;
+      let adjY = 2;
+      let adjBlur = 1;
+      items.forEach(function (item) {
+        if (item.x + (item.initialXDirection * adjX) >= canvas.width && item.initialXDirection !== 0 || item.x + (item.initialXDirection * adjX) <= 0 && item.initialXDirection !== 0) {
+          item.initialXDirection = item.initialXDirection * -1;
+        }
+        if (item.y + (item.initialYDirection * adjY) >= canvas.height && item.initialYDirection !== 0 || item.y + (item.initialYDirection * adjY) <= 0 && item.initialYDirection !== 0) {
+          item.initialYDirection = item.initialYDirection * -1;
+        }
+        if (item.blur + (item.initialBlurDirection * adjBlur) >= radius[1] && item.initialBlurDirection !== 0 || item.blur + (item.initialBlurDirection * adjBlur) <= radius[0] && item.initialBlurDirection !== 0) {
+          item.initialBlurDirection *= -1;
+        }
+        item.x += (item.initialXDirection * adjX);
+        item.y += (item.initialYDirection * adjY);
+        item.blur += (item.initialBlurDirection * adjBlur);
+        ctx.beginPath();
+        ctx.filter = `blur(${item.blur}px)`;
+        let grd = ctx.createLinearGradient(item.gradient[0], item.gradient[1], item.gradient[2], item.gradient[3]);
+        grd.addColorStop(0, item.colorOne);
+        grd.addColorStop(1, item.colorTwo);
+        ctx.fillStyle = grd;
+        ctx.arc(item.x, item.y, item.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
+      });
+      window.requestAnimationFrame(changeCanvas);
+    }
+    window.requestAnimationFrame(changeCanvas);
+  </script>
 </body>  
       
       
