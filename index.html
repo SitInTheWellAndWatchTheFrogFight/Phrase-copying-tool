@@ -60,10 +60,19 @@
       -webkit-text-fill-color: transparent;
       /* 背景裁剪，即让文字使用背景色 */
       -webkit-background-clip: text;
+      -moz-background-clip: text;
+      -moz-background-clip: text;
+      background-clip: text;
       /* 背景图放大一下，看着柔和一些 */
       -webkit-background-size: 200% 100%;
+      -moz-background-size: 200% 100%;
+      -o-background-size: 200% 100%;
+      background-size: 200% 100%;
       /* 应用动画flowCss 12秒速度 无限循环 线性匀速动画*/
       -webkit-animation: flowCss 12s infinite linear;
+      -moz-animation: flowCss 12s infinite linear;
+      -o-animation: flowCss 12s infinite linear;
+      animation: flowCss 12s infinite linear;
     }
   
     @-webkit-keyframes flowCss {
@@ -76,10 +85,41 @@
         background-position: -400% 0;
       }
     }
+    @-moz-keyframes flowCss {
+      0% {
+        background-position: 0 0;
+      }
+  
+      100% {
+        background-position: -400% 0;
+      }
+    }
+    @-o-keyframes flowCss {
+      0% {
+        background-position: 0 0;
+      }
+  
+      100% {
+        background-position: -400% 0;
+      }
+    }
+    @keyframes flowCss {
+      0% {
+        background-position: 0 0;
+      }
+  
+      100% {
+        background-position: -400% 0;
+      }
+    }
   
     input[type="text"]:hover {
       -webkit-animation: flowCss 4s infinite linear;
+      -moz-animation: flowCss 4s infinite linear;
+      -o-animation: flowCss 4s infinite linear;
+      animation: flowCss 4s infinite linear;
     }
+    
   
     svg {
       position: relative;
@@ -268,6 +308,57 @@
   <div> 49. <input type="text" value="谁家跃马来探春" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 49'; hideSvg(49); loadBallSpinning()">复制 49</button> </div>
   <div> 50. <input type="text" value="却笑澜翻啼布谷" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 50'; hideSvg(50); loadBallSpinning()">复制 50</button> </div>
 
+  <div> 51.  <input type="text" value="劳动节快乐" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 51'; hideSvg(51); loadBallSpinning()">复制 51</button> </div>
+  <div> 52.  <input type="text" value="劳动光荣汗水生辉" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 52'; hideSvg(52); loadBallSpinning()">复制 52</button> </div>
+  <div> 53.  <input type="text" value="汗水为墨写春秋" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 53'; hideSvg(53); loadBallSpinning()">复制 53</button> </div>
+  <div> 54.  <input type="text" value="勤耕不辍勇创未来" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 54'; hideSvg(54); loadBallSpinning()">复制 54</button> </div>
+  <div> 55.  <input type="text" value="劳动传薪火" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 55'; hideSvg(55); loadBallSpinning()">复制 55</button> </div>
+  <div> 56.  <input type="text" value="五一展荣光" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 56'; hideSvg(56); loadBallSpinning()">复制 56</button> </div>
+  <div> 57.  <input type="text" value="辛勤育希望" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 57'; hideSvg(57); loadBallSpinning()">复制 57</button> </div>
+  <div> 58.  <input type="text" value="劳动创辉煌" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 58'; hideSvg(58); loadBallSpinning()">复制 58</button> </div>
+  <div> 59.  <input type="text" value="双手绘蓝图" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 59'; hideSvg(59); loadBallSpinning()">复制 59</button> </div>
+  <div> 60. <input type="text" value="五一福满堂" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 60'; hideSvg(60); loadBallSpinning()">复制 60</button> </div>
+  <div> 61. <input type="text" value="拼搏正当时" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 61'; hideSvg(61); loadBallSpinning()">复制 61</button> </div>
+  <div> 62. <input type="text" value="辛勤育硕果" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 62'; hideSvg(62); loadBallSpinning()">复制 62</button> </div>
+  <div> 63. <input type="text" value="奋斗正启航" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 63'; hideSvg(63); loadBallSpinning()">复制 63</button> </div>
+  <div> 64. <input type="text" value="今天向劳动者致敬" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 64'; hideSvg(64); loadBallSpinning()">复制 64</button> </div>
+  <div> 65. <input type="text" value="给每个辛勤劳作的朋友送去祝福" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 65'; hideSvg(65); loadBallSpinning()">复制 65</button> </div>
+  <div> 66. <input type="text" value="人民最伟大" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 66'; hideSvg(66); loadBallSpinning()">复制 66</button> </div>
+  <div> 67. <input type="text" value="劳动最光荣" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 67'; hideSvg(67); loadBallSpinning()">复制 67</button> </div>
+  <div> 68. <input type="text" value="弘扬劳模精神" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 68'; hideSvg(68); loadBallSpinning()">复制 68</button> </div>
+  <div> 69. <input type="text" value="争当时代先锋" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 69'; hideSvg(69); loadBallSpinning()">复制 69</button> </div>
+  <div> 70. <input type="text" value="放假五天要跟大乔呆在一起" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 70'; hideSvg(70); loadBallSpinning()">复制 70</button> </div>
+  <div> 71. <input type="text" value="刘备祝你有个美好的假期" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 71'; hideSvg(71); loadBallSpinning()">复制 71</button> </div>
+  <div> 72. <input type="text" value="五一劳动节劳动最光荣" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 72'; hideSvg(72); loadBallSpinning()">复制 72</button> </div>
+  <div> 73. <input type="text" value="祝你有个美好的假期" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 73'; hideSvg(73); loadBallSpinning()">复制 73</button> </div>
+  <div> 74. <input type="text" value="心情放轻松" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 74'; hideSvg(74); loadBallSpinning()">复制 74</button> </div>
+  <div> 75. <input type="text" value="快乐在其中" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 75'; hideSvg(75); loadBallSpinning()">复制 75</button> </div>
+  <div> 76. <input type="text" value="享受美好风光" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 76'; hideSvg(76); loadBallSpinning()">复制 76</button> </div>
+  <div> 77. <input type="text" value="将烦恼抛去" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 77'; hideSvg(77); loadBallSpinning()">复制 77</button> </div>
+  <div> 78. <input type="text" value="开心快乐在" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 78'; hideSvg(78); loadBallSpinning()">复制 78</button> </div>
+  <div> 79. <input type="text" value="好事自然来" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 79'; hideSvg(79); loadBallSpinning()">复制 79</button> </div>
+  <div> 80. <input type="text" value="祝大家生活有希望吃肉不长胖" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 80'; hideSvg(80); loadBallSpinning()">复制 80</button> </div>
+  <div> 81. <input type="text" value="劳动节记得多陪陪家人" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 81'; hideSvg(81); loadBallSpinning()">复制 81</button> </div>
+  <div> 82. <input type="text" value="注意身体健康" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 82'; hideSvg(82); loadBallSpinning()">复制 82</button> </div>
+  <div> 83. <input type="text" value="身体是革命的本钱" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 83'; hideSvg(83); loadBallSpinning()">复制 83</button> </div>
+  <div> 84. <input type="text" value="用健康的身体去更好的奋斗" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 84'; hideSvg(84); loadBallSpinning()">复制 84</button> </div>
+  <div> 85. <input type="text" value="幸福的生活要靠劳动来获取" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 85'; hideSvg(85); loadBallSpinning()">复制 85</button> </div>
+  <div> 86. <input type="text" value="一直在路上奋斗" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 86'; hideSvg(86); loadBallSpinning()">复制 86</button> </div>
+  <div> 87. <input type="text" value="努力到感动自己" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 87'; hideSvg(87); loadBallSpinning()">复制 87</button> </div>
+  <div> 88. <input type="text" value="致敬为梦想步履不停的你" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 88'; hideSvg(88); loadBallSpinning()">复制 88</button> </div>
+  <div> 89. <input type="text" value="世界因你而更加美丽" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 89'; hideSvg(89); loadBallSpinning()">复制 89</button> </div>
+  <div> 90. <input type="text" value="生命不息劳动不止" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 90'; hideSvg(90); loadBallSpinning()">复制 90</button> </div>
+  <div> 91. <input type="text" value="今天要放纵自己睡个懒觉" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 91'; hideSvg(91); loadBallSpinning()">复制 91</button> </div>
+  <div> 92. <input type="text" value="劳动节一起鼓足干劲" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 92'; hideSvg(92); loadBallSpinning()">复制 92</button> </div>
+  <div> 93. <input type="text" value="劳动节力争上游" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 93'; hideSvg(93); loadBallSpinning()">复制 93</button> </div>
+  <div> 94. <input type="text" value="劳动节劳动能一夜暴富吗" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 94'; hideSvg(94); loadBallSpinning()">复制 94</button> </div>
+  <div> 95. <input type="text" value="劳动节我要躺五天" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 95'; hideSvg(95); loadBallSpinning()">复制 95</button> </div>
+  <div> 96. <input type="text" value="劳动节大家准备去哪里玩" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 96'; hideSvg(96); loadBallSpinning()">复制 96</button> </div>
+  <div> 97. <input type="text" value="劳动节天道酬勤" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 97'; hideSvg(97); loadBallSpinning()">复制 97</button> </div>
+  <div> 98. <input type="text" value="劳动节不负光阴" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 98'; hideSvg(98); loadBallSpinning()">复制 98</button> </div>
+  <div> 99. <input type="text" value="劳动节放三2见" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 99'; hideSvg(99); loadBallSpinning()">复制 99</button> </div>
+  <div> 100. <input type="text" value="" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 100'; hideSvg(100); loadBallSpinning()">复制 100</button> </div>
+
   <div class="wrap">
     <div class="round"></div>
     <div class="round"></div>
@@ -384,9 +475,10 @@
     }
 
     let divLists = document.querySelectorAll('div');
+    let inputLists = document.querySelectorAll('input');  // 获取所有输入框的数量
     let endTime = [];
-    for (let i = 0; i < 50; i++) {
-      endTime.push(i * 100 + 500);
+    for (let i = 0; i < inputLists.length; i++) {
+      endTime.push(i * 25 + 500);
       divLists[i].style.animation = 'move-From ' + endTime[i] + 'ms ease 1 normal none running';
       setTimeout(() => { loadSVG(divLists[i], i + 1); }, endTime[i]);
     }
@@ -493,56 +585,4 @@
     window.requestAnimationFrame(changeCanvas);
   </script>
 </body>  
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    </ul>
-</body>
 </html>    
