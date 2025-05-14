@@ -1,722 +1,604 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>短语复制工具</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>短语复制工具</title>
+    <style>
+        nav {
+          position: relative;
+          border-bottom: 1px solid black;
+          z-index: 500;
+        }
 
-  <style>
-    nav {
-      position: relative;
-      border-bottom: 1px solid black;
-      z-index: 1500;
-    }
-    
-    .crumbs ol {
-      list-style-type: none;
-      padding-left: 0;
-    }
-    
-    .crumb {
-      display: inline-block;
-      color: #08dfb4;
-      cursor: pointer;
-    }
+        .pageNavigation ol {
+          list-style-type: none;
+          padding-left: 0;
+        }
 
-    .crumb:hover {
-      text-decoration: underline;
-      color: #ff6ac6;
-    }
-    
-    .crumb a::after {
-      display: inline-block;
-      color: #2cc4e0;
-      content: ">";
-      font-size: 80%;
-      font-weight: bold;
-      padding: 0 3px;
-    }
-    
-    .crumb a{
-      color: #08dfb4;
-      cursor: pointer;
-    }
-  </style>  
+        .crumb {
+          display: inline-block;
+          position: relative;
+          color: white;
+          padding: 2em 1em;
+          border-collapse: collapse;
+          cursor: pointer;
+        }
 
-  <style>
-    #newsAndInformation {
-      position: relative;
-      overflow: auto;
-    }
+        .crumb:hover {
+          text-decoration: underline;
+          color: #ff6ac6;
+        }
+    </style>  
 
-    #newsAndInformation .loadNext {
-      display: inline-block;
-      text-align: center;
-      color: #08dfb4;
-      width: 10%;
-      font-size: 250%;
-      border-collapse: collapse;
-      z-index: 1000;
-      cursor: pointer;
-    }
+    <style>
+        body {
+            position: relative;
+            overflow: hidden;
+            /*188%窗口高度 */
+            height: 100vh;
+            /*弹性布局 居中显示 */
+            /**display: flex;*/
+            /**justify-content: center;*/
+            /**align-items: center;*/
 
-    #newsAndInformation .news {
-      display: none;
-      text-align: center;
-      color: aqua;
-      width: 75%;
-      padding: 5em 0;
-      border-style: solid;
-      border-collapse: collapse;
-      z-index: 1000;
-    }
+            display: flex;
+            flex: 150px 150px auto;
+        }
+        
+        .container {
+            /* 相对定位 */
+            position: fixed;
+            overflow: scroll;
+            /*渐变背景 */
+            background: linear-gradient(150deg, #d299c2, #fef9d7);
 
-    #newsAndInformation .loadNext:hover {
-      color: #ff6384;
-      background-color: rgba(255, 255, 255, 8);
-    }
-  </style>
+            width: 100%;
+            height: 100%;
+        }
 
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      padding: 0;
-      background: black;
-      margin: 0;
-    }
-  
-    canvas {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-    }
+        .bubble {
+            width: 150px;
+            height: 150px;
+            display: inline-block;
+            /*径向渐变 */
+            background: radial-gradient(circle at 75% 30%, #fff 5pX, #ff21c0 8%, #5b5b5b 60%, #ff21c0 100%);
+            border-radius: 50%;
+            /*阴影 */
+            box-shadow: inset 0 0 20px #fff,
+                inset 10px 0 46px #eaf5fc,
+                inset 80px 0 60px #efcde6,
+                inset -20px -60px 100px #f9f6de,
+                inset 0 50px 140px #f9f6de,
+                0 0 90px #fff;
+            
+            margin: 1em 1em;
+            /*执行动画:动画名 时长 加速后减速 无限次播放*/
+            animation: bubble 4s ease-in-out infinite;
+        }
+        /* 为第一行泡泡预留动画移动距离的位置 */
+        .bubble:nth-child(2) { /* 第二个子元素是第一行 */
+            width: 150px;
+            height: 150px;
+            display: inline-block;
+            /*径向渐变 */
+            background: radial-gradient(circle at 75% 30%, #fff 5pX, #ff21c0 8%, #5b5b5b 60%, #ff21c0 100%);
+            border-radius: 50%;
+            /*阴影 */
+            box-shadow: inset 0 0 20px #fff,
+                inset 10px 0 46px #eaf5fc,
+                inset 80px 0 60px #efcde6,
+                inset -20px -60px 100px #f9f6de,
+                inset 0 50px 140px #f9f6de,
+                0 0 90px #fff;
+            /*动画移动距离*/
+            margin: 80px 1em 1em 1em;
+            /*执行动画:动画名 时长 加速后减速 无限次播放*/
+            animation: bubble 4s ease-in-out infinite;
+        }
 
-    .content,
-    .wrap {
-      position: relative;
-      text-align: center;
-      z-index: 100;
-      color: aliceblue;
-      font-size: 1em;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      animation: move-From 500ms ease 1 normal none paused;
-    }
-  
-    input[type="text"] {
-      color: chocolate;
-      border: none;
-      font-size: 1em;
-      flex-grow: 1;
-      margin-right: 10px;
-  
-      background: -webkit-linear-gradient(135deg,
-          #0eaf6d,
-          #ff6ac6 25%,
-          #147b96 50%,
-          #e6d205 55%,
-          #2cc4e0 60%,
-          #8b2ce0 80%,
-          #ff6384 95%,
-          #08dfb4);
-      /* 文字颜色填充设置为透明 */
-      -webkit-text-fill-color: transparent;
-      /* 背景裁剪，即让文字使用背景色 */
-      -webkit-background-clip: text;
-      -moz-background-clip: text;
-      -moz-background-clip: text;
-      background-clip: text;
-      /* 背景图放大一下，看着柔和一些 */
-      -webkit-background-size: 200% 100%;
-      -moz-background-size: 200% 100%;
-      -o-background-size: 200% 100%;
-      background-size: 200% 100%;
-      /* 应用动画flowCss 12秒速度 无限循环 线性匀速动画*/
-      -webkit-animation: flowCss 12s infinite linear;
-      -moz-animation: flowCss 12s infinite linear;
-      -o-animation: flowCss 12s infinite linear;
-      animation: flowCss 12s infinite linear;
-    }
-  
-    @-webkit-keyframes flowCss {
-      0% {
-        /* 移动背景位置 */
-        background-position: 0 0;
-      }
-  
-      100% {
-        background-position: -400% 0;
-      }
-    }
-    @-moz-keyframes flowCss {
-      0% {
-        background-position: 0 0;
-      }
-  
-      100% {
-        background-position: -400% 0;
-      }
-    }
-    @-o-keyframes flowCss {
-      0% {
-        background-position: 0 0;
-      }
-  
-      100% {
-        background-position: -400% 0;
-      }
-    }
-    @keyframes flowCss {
-      0% {
-        background-position: 0 0;
-      }
-  
-      100% {
-        background-position: -400% 0;
-      }
-    }
-  
-    input[type="text"]:hover {
-      -webkit-animation: flowCss 4s infinite linear;
-      -moz-animation: flowCss 4s infinite linear;
-      -o-animation: flowCss 4s infinite linear;
-      animation: flowCss 4s infinite linear;
-    }
-    
-  
-    svg {
-      position: relative;
-      right: 10px;
-      width: 20px;
-      height: 3em;
-      z-index: 1000;
-    }
-  
-    button {
-      position: relative;
-      font-size: 1em;
-      padding: 5px 10px;
-      background-color: #38b2ac;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 500;
-    }
-  
-    button:hover {
-      background-color: #2c7a7b;
-    }
-  
-    /* 新增样式，用于标 this.previousElementSibling.classList.add('copied')记已复制的文本 */
-    .copied {
-      text-decoration: line-through;
-      text-decoration-color: red;
-      animation: move-From 500ms ease 1 normal none running;
-    }
-  
-    @keyframes move-From {
-      0% {
-        transform: translateX(100%);
-      }
-  
-      100% {
-        transform: translateX(0);
-      }
-    }
-  </style>
+        .bubble p {
+            visibility: visible;
+            /* 绝对定位 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -75%);
+            /*字体大小 */
+            font-size: 1em;
+            /*字体颜色 */
+            color: #fff;
+            /*字体居中 */
+            text-align: center;
+            /*防止选中干扰点击 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
 
-  <style>
-    /** 当用户点击复制按钮时，触发动画 */
-    .wrap {
-      margin: 120px 0 0 240px;
-      width: 75px;
-      height: 75px;
-      position: fixed;
-      top: 50%;
-      right: 50%;
-      /* transform-origin: 设置的效果搭配边框看，效果更加明显 */
-      /* border: 1px solid #e9e9e9; */
-    }
-  
-    .round {
-      /** 隐藏动画 */
-      display: none;
-  
-      position: fixed;
-      top: -200%;
-      right: 100%;
-      ;
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background-color: rgb(241, 141, 157);
-      /* 加上动画效果 */
-      animation: circleRound 2.8s ease infinite running;
-      /* 设置旋转中心，搭配.wrap的border看 */
-      transform-origin: 50% 75px;
-    }
-  
-    /* 注意z-index层级关系，依次递减 */
-    .round:nth-child(1) {
-      z-index: 7;
-    }
-  
-    /* 注意动画延后animation-delay播放，依次递增 */
-    /* 至于小圆球则越来越小 */
-    .round:nth-child(2) {
-      height: 12px;
-      width: 12px;
-      background-color: rgb(199, 136, 185);
-      animation-delay: .2s;
-      z-index: 6;
-    }
-  
-    .round:nth-child(3) {
-      height: 11px;
-      width: 11px;
-      background-color: rgb(153, 69, 223);
-      animation-delay: .4s;
-      z-index: 5;
-    }
-  
-    .round:nth-child(4) {
-      height: 10px;
-      width: 10px;
-      background-color: rgb(69, 141, 223);
-      animation-delay: .6s;
-      z-index: 4;
-    }
-  
-    .round:nth-child(5) {
-      height: 9px;
-      width: 9px;
-      background-color: rgb(69, 223, 203);
-      animation-delay: .8s;
-      z-index: 3;
-    }
-  
-    .round:nth-child(6) {
-      height: 8px;
-      width: 8px;
-      background-color: rgb(100, 223, 69);
-      animation-delay: 1s;
-      z-index: 2;
-    }
-  
-    .round:nth-child(7) {
-      height: 7px;
-      width: 7px;
-      background-color: rgb(223, 200, 69);
-      animation-delay: 1.2s;
-      z-index: 1;
-    }
-  
-    @keyframes circleRound {
-      to {
-        transform: rotate(1turn);
-      }
-    }
-  </style>
+        /*泡泡浮动动画*/
+        @keyframes bubble {
 
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-80px);
+            }
+        }
+    </style>
+
+    <style>
+        /* 新增水珠碎片样式 */
+        .debris {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle at 30% 30%, #fff 20%, #ff21c0 70%);
+            border-radius: 50%;
+            opacity: 0.9;
+            animation: debris-fly 0.8s ease-out forwards;
+            box-shadow: 0 0 10px #ff21c0;
+        }
+
+        @keyframes debris-fly {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(calc((var(--x) - 0.5) * 200px),
+                        calc((var(--y) - 0.5) * 200px));
+                opacity: 0;
+            }
+        }
+    </style>
+
+    <style>
+        /* 新增提示信息样式 */
+        .prompt {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1em;
+            color: white;
+            background-color: darkgray;
+            text-align: center;
+            animation: prompt-appear 1.5s ease-in-out forwards;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes prompt-appear {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50px);
+                opacity: 1;
+            }
+            
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <canvas id="canvas"></canvas>
 
-  <!--<nav class="crumbs">   -->
-  <!--  <ol>     -->
-  <!--    <li class="crumb"><a href="#">Bikes</a></li>     -->
-  <!--    <li class="crumb"><a href="#">BMX</a></li>     -->
-  <!--    <li class="crumb">Jump Bike 3000</li>   -->
-  <!--  </ol> -->
-  <!--</nav> -->
-
-  <div id="newsAndInformation">
-    <div class="loadNext">&lt</div>
-    <div class="news">短语复制工具</div>
-    <div class="news">点击复制按钮即可复制短语</div>
-    <div class="news">所有短语都来自网络，仅供游戏中领取礼包使用</div>
-    <div class="news">本站承诺不会引用任何游戏中的图片和音频等资源</div>
-    <div class="loadNext">&gt</div>
-  </div>
-
-  <div class="content"> 1.  <input type="text" value="五一鲜花满园" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 1'; hideSvg(1); loadBallSpinning()">复制 1</button> </div>
-  <div class="content"> 2.  <input type="text" value="要兴致勃勃地过劳动节呀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 2'; hideSvg(2); loadBallSpinning()">复制 2</button> </div>
-  <div class="content"> 3.  <input type="text" value="劳动节辛勤劳动带来果实" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 3'; hideSvg(3); loadBallSpinning()">复制 3</button> </div>
-  <div class="content"> 4.  <input type="text" value="劳动节智慧劳动创造无尽财富" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 4'; hideSvg(4); loadBallSpinning()">复制 4</button> </div>
-  <div class="content"> 5.  <input type="text" value="劳动节快乐劳动带来美好心情" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 5'; hideSvg(5); loadBallSpinning()">复制 5</button> </div>
-  <div class="content"> 6.  <input type="text" value="劳动节请劳逸相结合" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 6'; hideSvg(6); loadBallSpinning()">复制 6</button> </div>
-  <div class="content"> 7.  <input type="text" value="憧憬着放假的欢乐" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 7'; hideSvg(7); loadBallSpinning()">复制 7</button> </div>
-  <div class="content"> 8.  <input type="text" value="五一的日子轻松自在" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 8'; hideSvg(8); loadBallSpinning()">复制 8</button> </div>
-  <div class="content"> 9.  <input type="text" value="祝你劳动节越来越有活力" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 9'; hideSvg(9); loadBallSpinning()">复制 9</button> </div>
-  <div class="content"> 10. <input type="text" value="放完假精神满满迎接新的工作" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 10'; hideSvg(10); loadBallSpinning()">复制 10</button> </div>
-  <div class="content"> 11. <input type="text" value="雨足高田白" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 11'; hideSvg(11); loadBallSpinning()">复制 11</button> </div>
-  <div class="content"> 12. <input type="text" value="披蓑半夜耕" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 12'; hideSvg(12); loadBallSpinning()">复制 12</button> </div>
-  <div class="content"> 13. <input type="text" value="人牛力俱尽" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 13'; hideSvg(13); loadBallSpinning()">复制 13</button> </div>
-  <div class="content"> 14. <input type="text" value="东方殊未明" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 14'; hideSvg(14); loadBallSpinning()">复制 14</button> </div>
-  <div class="content"> 15. <input type="text" value="斜阳照墟落" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 15'; hideSvg(15); loadBallSpinning()">复制 15</button> </div>
-  <div class="content"> 16. <input type="text" value="穷巷牛羊归" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 16'; hideSvg(16); loadBallSpinning()">复制 16</button> </div>
-  <div class="content"> 17. <input type="text" value="野老念牧童" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 17'; hideSvg(17); loadBallSpinning()">复制 17</button> </div>
-  <div class="content"> 18. <input type="text" value="倚杖候荆扉" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 18'; hideSvg(18); loadBallSpinning()">复制 18</button> </div>
-  <div class="content"> 19. <input type="text" value="雉雊麦苗秀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 19'; hideSvg(19); loadBallSpinning()">复制 19</button> </div>
-  <div class="content"> 20. <input type="text" value="蚕眠桑叶稀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 20'; hideSvg(20); loadBallSpinning()">复制 20</button> </div>
-  <div class="content"> 21. <input type="text" value="田夫荷锄至" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 21'; hideSvg(21); loadBallSpinning()">复制 21</button> </div>
-  <div class="content"> 22. <input type="text" value="相见语依依" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 22'; hideSvg(22); loadBallSpinning()">复制 22</button> </div>
-  <div class="content"> 23. <input type="text" value="即此羡闲逸" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 23'; hideSvg(23); loadBallSpinning()">复制 23</button> </div>
-  <div class="content"> 24. <input type="text" value="怅然吟式微" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 24'; hideSvg(24); loadBallSpinning()">复制 24</button> </div>
-  <div class="content"> 25. <input type="text" value="种豆南山下" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 25'; hideSvg(25); loadBallSpinning()">复制 25</button> </div>
-  <div class="content"> 26. <input type="text" value="草盛豆苗稀" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 26'; hideSvg(26); loadBallSpinning()">复制 26</button> </div>
-  <div class="content"> 27. <input type="text" value="晨兴理荒秽" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 27'; hideSvg(27); loadBallSpinning()">复制 27</button> </div>
-  <div class="content"> 28. <input type="text" value="带月荷锄归" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 28'; hideSvg(28); loadBallSpinning()">复制 28</button> </div>
-  <div class="content"> 29. <input type="text" value="道狭草木长" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 29'; hideSvg(29); loadBallSpinning()">复制 29</button> </div>
-  <div class="content"> 30. <input type="text" value="タ露沾我衣" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 30'; hideSvg(30); loadBallSpinning()">复制 30</button> </div>
-  <div class="content"> 31. <input type="text" value="衣沾不足惜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 31'; hideSvg(31); loadBallSpinning()">复制 31</button> </div>
-  <div class="content"> 32. <input type="text" value="但使愿无违" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 32'; hideSvg(32); loadBallSpinning()">复制 32</button> </div>
-  <div class="content"> 33. <input type="text" value="荷叶罗裙一色裁" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 33'; hideSvg(33); loadBallSpinning()">复制 33</button> </div>
-  <div class="content"> 34. <input type="text" value="芙蓉向脸两边开" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 34'; hideSvg(34); loadBallSpinning()">复制 34</button> </div>
-  <div class="content"> 35. <input type="text" value="乱入池中看不见" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 35'; hideSvg(35); loadBallSpinning()">复制 35</button> </div>
-  <div class="content"> 36. <input type="text" value="闻歌始觉有人来" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 36'; hideSvg(36); loadBallSpinning()">复制 36</button> </div>
-  <div class="content"> 37. <input type="text" value="小园烟草接邻家" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 37'; hideSvg(37); loadBallSpinning()">复制 37</button> </div>
-  <div class="content"> 38. <input type="text" value="桑柘阴阴一径斜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 38'; hideSvg(38); loadBallSpinning()">复制 38</button> </div>
-  <div class="content"> 39. <input type="text" value="卧读陶诗未终卷" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 39'; hideSvg(39); loadBallSpinning()">复制 39</button> </div>
-  <div class="content"> 40. <input type="text" value="又乘微雨去锄瓜" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 40'; hideSvg(40); loadBallSpinning()">复制 40</button> </div>
-  <div class="content"> 41. <input type="text" value="微雨众卉新" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 41'; hideSvg(41); loadBallSpinning()">复制 41</button> </div>
-  <div class="content"> 42. <input type="text" value="一雷惊蛰始" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 42'; hideSvg(42); loadBallSpinning()">复制 42</button> </div>
-  <div class="content"> 43. <input type="text" value="田家几日闲" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 43'; hideSvg(43); loadBallSpinning()">复制 43</button> </div>
-  <div class="content"> 44. <input type="text" value="耕种从此起" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 44'; hideSvg(44); loadBallSpinning()">复制 44</button> </div>
-  <div class="content"> 45. <input type="text" value="呼唤携锄至" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 45'; hideSvg(45); loadBallSpinning()">复制 45</button> </div>
-  <div class="content"> 46. <input type="text" value="安排筑圃忙" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 46'; hideSvg(46); loadBallSpinning()">复制 46</button> </div>
-  <div class="content"> 47. <input type="text" value="农家且喜春耕足" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 47'; hideSvg(47); loadBallSpinning()">复制 47</button> </div>
-  <div class="content"> 48. <input type="text" value="未晓呼儿饭黄犊" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 48'; hideSvg(48); loadBallSpinning()">复制 48</button> </div>
-  <div class="content"> 49. <input type="text" value="谁家跃马来探春" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 49'; hideSvg(49); loadBallSpinning()">复制 49</button> </div>
-  <div class="content"> 50. <input type="text" value="却笑澜翻啼布谷" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 50'; hideSvg(50); loadBallSpinning()">复制 50</button> </div>
-
-  <div class="content"> 51.  <input type="text" value="劳动节快乐" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 51'; hideSvg(51); loadBallSpinning()">复制 51</button> </div>
-  <div class="content"> 52.  <input type="text" value="劳动光荣汗水生辉" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 52'; hideSvg(52); loadBallSpinning()">复制 52</button> </div>
-  <div class="content"> 53.  <input type="text" value="汗水为墨写春秋" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 53'; hideSvg(53); loadBallSpinning()">复制 53</button> </div>
-  <div class="content"> 54.  <input type="text" value="勤耕不辍勇创未来" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 54'; hideSvg(54); loadBallSpinning()">复制 54</button> </div>
-  <div class="content"> 55.  <input type="text" value="劳动传薪火" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 55'; hideSvg(55); loadBallSpinning()">复制 55</button> </div>
-  <div class="content"> 56.  <input type="text" value="五一展荣光" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 56'; hideSvg(56); loadBallSpinning()">复制 56</button> </div>
-  <div class="content"> 57.  <input type="text" value="辛勤育希望" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 57'; hideSvg(57); loadBallSpinning()">复制 57</button> </div>
-  <div class="content"> 58.  <input type="text" value="劳动创辉煌" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 58'; hideSvg(58); loadBallSpinning()">复制 58</button> </div>
-  <div class="content"> 59.  <input type="text" value="双手绘蓝图" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 59'; hideSvg(59); loadBallSpinning()">复制 59</button> </div>
-  <div class="content"> 60. <input type="text" value="五一福满堂" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 60'; hideSvg(60); loadBallSpinning()">复制 60</button> </div>
-  <div class="content"> 61. <input type="text" value="拼搏正当时" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 61'; hideSvg(61); loadBallSpinning()">复制 61</button> </div>
-  <div class="content"> 62. <input type="text" value="辛勤育硕果" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 62'; hideSvg(62); loadBallSpinning()">复制 62</button> </div>
-  <div class="content"> 63. <input type="text" value="奋斗正启航" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 63'; hideSvg(63); loadBallSpinning()">复制 63</button> </div>
-  <div class="content"> 64. <input type="text" value="今天向劳动者致敬" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 64'; hideSvg(64); loadBallSpinning()">复制 64</button> </div>
-  <div class="content"> 65. <input type="text" value="给每个辛勤劳作的朋友送去祝福" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 65'; hideSvg(65); loadBallSpinning()">复制 65</button> </div>
-  <div class="content"> 66. <input type="text" value="人民最伟大" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 66'; hideSvg(66); loadBallSpinning()">复制 66</button> </div>
-  <div class="content"> 67. <input type="text" value="劳动最光荣" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 67'; hideSvg(67); loadBallSpinning()">复制 67</button> </div>
-  <div class="content"> 68. <input type="text" value="弘扬劳模精神" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 68'; hideSvg(68); loadBallSpinning()">复制 68</button> </div>
-  <div class="content"> 69. <input type="text" value="争当时代先锋" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 69'; hideSvg(69); loadBallSpinning()">复制 69</button> </div>
-  <div class="content"> 70. <input type="text" value="放假五天要跟大乔呆在一起" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 70'; hideSvg(70); loadBallSpinning()">复制 70</button> </div>
-  <div class="content"> 71. <input type="text" value="刘备祝你有个美好的假期" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 71'; hideSvg(71); loadBallSpinning()">复制 71</button> </div>
-  <div class="content"> 72. <input type="text" value="五一劳动节劳动最光荣" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 72'; hideSvg(72); loadBallSpinning()">复制 72</button> </div>
-  <div class="content"> 73. <input type="text" value="祝你有个美好的假期" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 73'; hideSvg(73); loadBallSpinning()">复制 73</button> </div>
-  <div class="content"> 74. <input type="text" value="心情放轻松" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 74'; hideSvg(74); loadBallSpinning()">复制 74</button> </div>
-  <div class="content"> 75. <input type="text" value="快乐在其中" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 75'; hideSvg(75); loadBallSpinning()">复制 75</button> </div>
-  <div class="content"> 76. <input type="text" value="享受美好风光" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 76'; hideSvg(76); loadBallSpinning()">复制 76</button> </div>
-  <div class="content"> 77. <input type="text" value="将烦恼抛去" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 77'; hideSvg(77); loadBallSpinning()">复制 77</button> </div>
-  <div class="content"> 78. <input type="text" value="开心快乐在" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 78'; hideSvg(78); loadBallSpinning()">复制 78</button> </div>
-  <div class="content"> 79. <input type="text" value="好事自然来" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 79'; hideSvg(79); loadBallSpinning()">复制 79</button> </div>
-  <div class="content"> 80. <input type="text" value="祝大家生活有希望吃肉不长胖" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 80'; hideSvg(80); loadBallSpinning()">复制 80</button> </div>
-  <div class="content"> 81. <input type="text" value="劳动节记得多陪陪家人" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 81'; hideSvg(81); loadBallSpinning()">复制 81</button> </div>
-  <div class="content"> 82. <input type="text" value="注意身体健康" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 82'; hideSvg(82); loadBallSpinning()">复制 82</button> </div>
-  <div class="content"> 83. <input type="text" value="身体是革命的本钱" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 83'; hideSvg(83); loadBallSpinning()">复制 83</button> </div>
-  <div class="content"> 84. <input type="text" value="用健康的身体去更好的奋斗" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 84'; hideSvg(84); loadBallSpinning()">复制 84</button> </div>
-  <div class="content"> 85. <input type="text" value="幸福的生活要靠劳动来获取" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 85'; hideSvg(85); loadBallSpinning()">复制 85</button> </div>
-  <div class="content"> 86. <input type="text" value="一直在路上奋斗" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 86'; hideSvg(86); loadBallSpinning()">复制 86</button> </div>
-  <div class="content"> 87. <input type="text" value="努力到感动自己" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 87'; hideSvg(87); loadBallSpinning()">复制 87</button> </div>
-  <div class="content"> 88. <input type="text" value="致敬为梦想步履不停的你" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 88'; hideSvg(88); loadBallSpinning()">复制 88</button> </div>
-  <div class="content"> 89. <input type="text" value="世界因你而更加美丽" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 89'; hideSvg(89); loadBallSpinning()">复制 89</button> </div>
-  <div class="content"> 90. <input type="text" value="生命不息劳动不止" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 90'; hideSvg(90); loadBallSpinning()">复制 90</button> </div>
-  <div class="content"> 91. <input type="text" value="今天要放纵自己睡个懒觉" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 91'; hideSvg(91); loadBallSpinning()">复制 91</button> </div>
-  <div class="content"> 92. <input type="text" value="劳动节一起鼓足干劲" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 92'; hideSvg(92); loadBallSpinning()">复制 92</button> </div>
-  <div class="content"> 93. <input type="text" value="劳动节力争上游" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 93'; hideSvg(93); loadBallSpinning()">复制 93</button> </div>
-  <div class="content"> 94. <input type="text" value="劳动节劳动能一夜暴富吗" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 94'; hideSvg(94); loadBallSpinning()">复制 94</button> </div>
-  <div class="content"> 95. <input type="text" value="劳动节我要躺五天" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 95'; hideSvg(95); loadBallSpinning()">复制 95</button> </div>
-  <div class="content"> 96. <input type="text" value="劳动节大家准备去哪里玩" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 96'; hideSvg(96); loadBallSpinning()">复制 96</button> </div>
-  <div class="content"> 97. <input type="text" value="劳动节天道酬勤" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 97'; hideSvg(97); loadBallSpinning()">复制 97</button> </div>
-  <div class="content"> 98. <input type="text" value="劳动节不负光阴" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 98'; hideSvg(98); loadBallSpinning()">复制 98</button> </div>
-  <div class="content"> 99. <input type="text" value="劳动节放三2见" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 99'; hideSvg(99); loadBallSpinning()">复制 99</button> </div>
-  <div class="content"> 100. <input type="text" value="劳动节轻松找快乐" readonly> <button onclick="this.previousElementSibling.select(); document.execCommand('copy'); this.previousElementSibling.classList.add('copied'); this.textContent='继续复制 100'; hideSvg(100); loadBallSpinning()">复制 100</button> </div>
-
-  <div class="wrap">
-    <div class="round"></div>
-    <div class="round"></div>
-    <div class="round"></div>
-    <div class="round"></div>
-    <div class="round"></div>
-    <div class="round"></div>
-    <div class="round"></div>
-  </div>
-
-  <script>
-    let currentItemIndex = 0; // 当前显示的新闻或信息的索引
+    <div class="container">
+      <!-- <nav class="pageNavigation"> -->
+      <!--   <ol> -->
+      <!--     <li class="crumb">自由复制模式</li> -->
+      <!--     <li class="crumb">懒人复制模式</li> -->
+      <!--   </ol> -->
+      <!-- </nav> -->
+      <div class="bubble"><p>1.夏天到啦</p> </div>
+      <div class="bubble"><p>2.轻风启夏热忱满载</p> </div>
+      <div class="bubble"><p>3.芳菲歇去何须恨</p> </div>
+      <div class="bubble"><p>4.夏木阴阴正可人</p> </div>
+      <div class="bubble"><p>5.暮春作别初夏相迎</p> </div>
+      <div class="bubble"><p>6.四时流转万物并秀</p> </div>
+      <div class="bubble"><p>7.初夏予你清风</p> </div>
+      <div class="bubble"><p>8.愿你心随流云自在悠扬</p> </div>
+      <div class="bubble"><p>9.让欢愉似莲叶舒展</p> </div>
+      <div class="bubble"><p>10.让福气如繁星满窗</p> </div>
+      <div class="bubble"><p>11.愿每个日子都奔涌希望</p> </div>
+      <div class="bubble"><p>12.愿你在绿荫蝉鸣里拾得整季清欢</p> </div>
+      <div class="bubble"><p>13.槐荫初密夏意渐浓</p> </div>
+      <div class="bubble"><p>14.推窗可摘青梅嗅</p> </div>
+      <div class="bubble"><p>15.午后闲听竹簟幽</p> </div>
+      <div class="bubble"><p>16.夕照染霞烹茶饮</p> </div>
+      <div class="bubble"><p>17.夜揽流萤入画轴</p> </div>
+      <div class="bubble"><p>18.春笺未干续夏章</p> </div>
+      <div class="bubble"><p>19.告别春日的慵懒</p> </div>
+      <div class="bubble"><p>20.点燃夏日的热情</p> </div>
+      <div class="bubble"><p>21.以梦为马不负时光</p> </div>
+      <div class="bubble"><p>22.夏日的风吹来了夏天的消息</p> </div>
+      <div class="bubble"><p>23.夏日的雨滋润了希望的萌芽</p> </div>
+      <div class="bubble"><p>24.愿你如夏日的骄阳充满能量</p> </div>
+      <div class="bubble"><p>25.如绽放的荷花清新脱俗</p> </div>
+      <div class="bubble"><p>26.烦恼在夏日的热浪中消散</p> </div>
+      <div class="bubble"><p>27.幸福在季节的变换中沉淀</p> </div>
+      <div class="bubble"><p>28.带着春的希望拥抱夏的热忱</p> </div>
+      <div class="bubble"><p>29.心中有清凉</p> </div>
+      <div class="bubble"><p>30.眼里有光芒</p> </div>
+      <div class="bubble"><p>31.晨起迎朝阳</p> </div>
+      <div class="bubble"><p>32.暮归伴星光</p> </div>
+      <div class="bubble"><p>33.如禾苗般拔节生长</p> </div>
+      <div class="bubble"><p>34.如向日葵般追逐阳光</p> </div>
+      <div class="bubble"><p>35.祝你盛夏有闲趣</p> </div>
+      <div class="bubble"><p>36.好运如阳光般照耀你</p> </div>
+      <div class="bubble"><p>37.快乐如清风般环绕你</p> </div>
+      <div class="bubble"><p>38.健康如云朵般庇护你</p> </div>
+      <div class="bubble"><p>39.快雨知春尽</p> </div>
+      <div class="bubble"><p>40.鸣禽觉夏初</p> </div>
+      <div class="bubble"><p>41.日高槐影直</p> </div>
+      <div class="bubble"><p>42.风细竹声疏</p> </div>
+      <div class="bubble"><p>43.四月清和雨乍晴</p> </div>
+      <div class="bubble"><p>44.南山当户转分明</p> </div>
+      <div class="bubble"><p>45.更无柳絮因风起</p> </div>
+      <div class="bubble"><p>46.惟有葵花向日倾</p> </div>
+      <div class="bubble"><p>47.谢却海棠飞尽絮</p> </div>
+      <div class="bubble"><p>48.困人天气日初长</p> </div>
+      <div class="bubble"><p>49.一枝斜插蓝罗扇</p> </div>
+      <div class="bubble"><p>50.摇动时时送好香</p> </div>
+      <!-- <div class="bubble"><p>51.劳动节快乐</p> </div> -->
+      <!-- <div class="bubble"><p>52.劳动光荣汗水生辉</p> </div> -->
+      <!-- <div class="bubble"><p>53.汗水为墨写春秋</p> </div> -->
+      <!-- <div class="bubble"><p>54.勤耕不辍勇创未来</p> </div> -->
+      <!-- <div class="bubble"><p>55.劳动传薪火</p> </div> -->
+      <!-- <div class="bubble"><p>56.五一展荣光</p> </div> -->
+      <!-- <div class="bubble"><p>57.辛勤育希望</p> </div> -->
+      <!-- <div class="bubble"><p>58.劳动创辉煌</p> </div> -->
+      <!-- <div class="bubble"><p>59.双手绘蓝图</p> </div> -->
+      <!-- <div class="bubble"><p>60.五一福满堂</p> </div> -->
+      <!-- <div class="bubble"><p>61.拼搏正当时</p> </div> -->
+      <!-- <div class="bubble"><p>62.辛勤育硕果</p> </div> -->
+      <!-- <div class="bubble"><p>63.奋斗正启航</p> </div> -->
+      <!-- <div class="bubble"><p>64.今天向劳动者致敬</p> </div> -->
+      <!-- <div class="bubble"><p>65.给每个辛勤劳作的朋友送去祝福</p> </div> -->
+      <!-- <div class="bubble"><p>66.人民最伟大</p> </div> -->
+      <!-- <div class="bubble"><p>67.劳动最光荣</p> </div> -->
+      <!-- <div class="bubble"><p>68.弘扬劳模精神</p> </div> -->
+      <!-- <div class="bubble"><p>69.争当时代先锋</p> </div> -->
+      <!-- <div class="bubble"><p>70.放假五天要跟大乔呆在一起</p> </div> -->
+      <!-- <div class="bubble"><p>71.刘备祝你有个美好的假期</p> </div> -->
+      <!-- <div class="bubble"><p>72.五一劳动节劳动最光荣</p> </div> -->
+      <!-- <div class="bubble"><p>73.祝你有个美好的假期</p> </div> -->
+      <!-- <div class="bubble"><p>74.心情放轻松</p> </div> -->
+      <!-- <div class="bubble"><p>75.快乐在其中</p> </div> -->
+      <!-- <div class="bubble"><p>76.享受美好风光</p> </div> -->
+      <!-- <div class="bubble"><p>77.将烦恼抛去</p> </div> -->
+      <!-- <div class="bubble"><p>78.开心快乐在</p> </div> -->
+      <!-- <div class="bubble"><p>79.好事自然来</p> </div> -->
+      <!-- <div class="bubble"><p>80.祝大家生活有希望吃肉不长胖</p> </div> -->
+      <!-- <div class="bubble"><p>81.劳动节记得多陪陪家人</p> </div> -->
+      <!-- <div class="bubble"><p>82.注意身体健康</p> </div> -->
+      <!-- <div class="bubble"><p>83.身体是革命的本钱</p> </div> -->
+      <!-- <div class="bubble"><p>84.用健康的身体去更好的奋斗</p> </div> -->
+      <!-- <div class="bubble"><p>85.幸福的生活要靠劳动来获取</p> </div> -->
+      <!-- <div class="bubble"><p>86.一直在路上奋斗</p> </div> -->
+      <!-- <div class="bubble"><p>87.努力到感动自己</p> </div> -->
+      <!-- <div class="bubble"><p>88.致敬为梦想步履不停的你</p> </div> -->
+      <!-- <div class="bubble"><p>89.世界因你而更加美丽</p> </div> -->
+      <!-- <div class="bubble"><p>90.生命不息劳动不止</p> </div> -->
+      <!-- <div class="bubble"><p>91.今天要放纵自己睡个懒觉</p> </div> -->
+      <!-- <div class="bubble"><p>92.劳动节一起鼓足干劲</p> </div> -->
+      <!-- <div class="bubble"><p>93.劳动节力争上游</p> </div> -->
+      <!-- <div class="bubble"><p>94.劳动节劳动能一夜暴富吗</p> </div> -->
+      <!-- <div class="bubble"><p>95.劳动节我要躺五天</p> </div> -->
+      <!-- <div class="bubble"><p>96.劳动节大家准备去哪里玩</p> </div> -->
+      <!-- <div class="bubble"><p>97.劳动节天道酬勤</p> </div> -->
+      <!-- <div class="bubble"><p>98.劳动节不负光阴</p> </div> -->
+      <!-- <div class="bubble"><p>99.劳动节放三2见</p> </div> -->
+      <!-- <div class="bubble"><p>100.劳动节轻松找快乐</p> </div> -->
+    </div>
     
-    let autoLoadNext; // 自动加载新闻和信息的定时器
-    let newsAndInformation = document.getElementById('newsAndInformation');
+    <script>
+        let copycontent = [
+                "夏天到啦",
+                "轻风启夏热忱满载",
+                "芳菲歇去何须恨",
+                "夏木阴阴正可人",
+                "暮春作别初夏相迎",
+                "四时流转万物并秀",
+                "初夏予你清风",
+                "愿你心随流云自在悠扬",
+                "让欢愉似莲叶舒展",
+                "让福气如繁星满窗",
+                "愿每个日子都奔涌希望",
+                "愿你在绿荫蝉鸣里拾得整季清欢",
+                "槐荫初密夏意渐浓",
+                "推窗可摘青梅嗅",
+                "午后闲听竹簟幽",
+                "夕照染霞烹茶饮",
+                "夜揽流萤入画轴",
+                "春笺未干续夏章",
+                "告别春日的慵懒",
+                "点燃夏日的热情",
+                "以梦为马不负时光",
+                "夏日的风吹来了夏天的消息",
+                "夏日的雨滋润了希望的萌芽",
+                "愿你如夏日的骄阳充满能量",
+                "如绽放的荷花清新脱俗",
+                "烦恼在夏日的热浪中消散",
+                "幸福在季节的变换中沉淀",
+                "带着春的希望拥抱夏的热忱",
+                "心中有清凉",
+                "眼里有光芒",
+                "晨起迎朝阳",
+                "暮归伴星光",
+                "如禾苗般拔节生长",
+                "如向日葵般追逐阳光",
+                "祝你盛夏有闲趣",
+                "好运如阳光般照耀你",
+                "快乐如清风般环绕你",
+                "健康如云朵般庇护你",
+                "快雨知春尽",
+                "鸣禽觉夏初",
+                "日高槐影直",
+                "风细竹声疏",
+                "四月清和雨乍晴",
+                "南山当户转分明",
+                "更无柳絮因风起",
+                "惟有葵花向日倾",
+                "谢却海棠飞尽絮",
+                "困人天气日初长",
+                "一枝斜插蓝罗扇",
+                "摇动时时送好香",
+                //"劳动节快乐",
+                //"劳动光荣汗水生辉",
+                //"汗水为墨写春秋",
+                //"勤耕不辍勇创未来",
+                //"劳动传薪火",
+                //"五一展荣光",
+                //"辛勤育希望",
+                //"劳动创辉煌",
+                //"双手绘蓝图",
+                //"五一福满堂",
+                //"拼搏正当时",
+                //"辛勤育硕果",
+                //"奋斗正启航",
+                //"今天向劳动者致敬",
+                //"给每个辛勤劳作的朋友送去祝福",
+                //"人民最伟大",
+                //"劳动最光荣",
+                //"弘扬劳模精神",
+                //"争当时代先锋",
+                //"放假五天要跟大乔呆在一起",
+                //"刘备祝你有个美好的假期",
+                //"五一劳动节劳动最光荣",
+                //"祝你有个美好的假期",
+                //"心情放轻松",
+                //"快乐在其中",
+                //"享受美好风光",
+                //"将烦恼抛去",
+                //"开心快乐在",
+                //"好事自然来",
+                //"祝大家生活有希望吃肉不长胖",
+                //"劳动节记得多陪陪家人",
+                //"注意身体健康",
+                //"身体是革命的本钱",
+                //"用健康的身体去更好的奋斗",
+                //"幸福的生活要靠劳动来获取",
+                //"一直在路上奋斗",
+                //"努力到感动自己",
+                //"致敬为梦想步履不停的你",
+                //"世界因你而更加美丽",
+                //"生命不息劳动不止",
+                //"今天要放纵自己睡个懒觉",
+                //"劳动节一起鼓足干劲",
+                //"劳动节力争上游",
+                //"劳动节劳动能一夜暴富吗",
+                //"劳动节我要躺五天",
+                //"劳动节大家准备去哪里玩",
+                //"劳动节天道酬勤",
+                //"劳动节不负光阴",
+                //"劳动节放三2见",
+                //"劳动节轻松找快乐"
+                ];
+        let count = 0;
+        let EvEntLists = [];
+        
 
-    /**
-     * 通过点击左右按钮切换新闻和信息
-     * @param {String} Direction - 方向，'left'表示向左切换，'right'表示向右切换
-     */
-    function loadNewsAndInformation(Direction) {
-      let newsAndInformationItems = document.querySelectorAll('.news');
-      
-      for (let i = 0; i < newsAndInformationItems.length; i++) {
-        newsAndInformationItems[i].style.display = 'none';
-      }
+        function copyTextToClipboard(textContent) {
+            const input = document.createElement('input');
+            input.style.position = 'absolute';
+            input.style.left = '-9999px';
+            input.value = textContent;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
 
-      switch (Direction) {
-      case 'left':
-        newsAndInformationItems[(currentItemIndex - 1 + newsAndInformationItems.length) % newsAndInformationItems.length].style.display = 'inline-block';
-        currentItemIndex = (currentItemIndex - 1 + newsAndInformationItems.length) % newsAndInformationItems.length;
-        break;
-      case 'right':
-        newsAndInformationItems[(currentItemIndex + 1) % newsAndInformationItems.length].style.display = 'inline-block';
-        currentItemIndex = (currentItemIndex + 1) % newsAndInformationItems.length;
-        break;
-      }
-      // 取消已经准备就绪的自动切换，延时3000毫秒后再启动自动切换
-      clearTimeout(autoLoadNext);
-      autoLoadNewsAndInformation();
-    }
-    
-    /**
-     * 以下是每隔一段时间自动加载新闻和信息的JavaScript代码
-     */
-    function autoLoadNewsAndInformation(){
-      autoLoadNext = setTimeout(() => {
-        loadNewsAndInformation('right');
-      }, 3000);
-    }
+            let propmt = document.createElement('p');
+            propmt.textContent = '已复制到剪贴板';
+            propmt.classList.add('prompt');
+            document.body.appendChild(propmt);
 
-    /**
-     * 以下是动画效果的JavaScript代码
-     * @param {Element} ElementObject 动画元素的DOM对象
-     * @param {Number} serialNumber 动画元素的序号
-     */
-    function loadSVG(ElementObject, serialNumber) {
-      /** 
-      * 以下是SVG代码，可以直接在HTML中使用，也可以通过JavaScript动态生成的CSS
-      * <svg id="mySvg" viewBox="0 0 100 100">
-      *     <defs>
-      *         <radialGradient id="ballGradient" cx="30%" cy="30%" r="70%">
-      *             <stop offset="0%" stop-color="#FF4444" />
-      *             <stop offset="100%" stop-color="#CC0000" />
-      *         </radialGradient>
-      *     </defs>
-      *     <circle cx="50" cy="50" r="50" fill="url(#ballGradient)" />
-      * </svg>
-      */
-      let newSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      newSVG.id = 'mySvg' + serialNumber;
-      let newAttribs = document.createAttribute('viewBox');
-      newAttribs.value = '0 0 100 100';
-      newSVG.setAttributeNode(newAttribs);
-
-      let newDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-      let newRadialGradient = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
-      let newRadialGradientAttribs = document.createAttribute('id');
-      newRadialGradientAttribs.value = 'ballGradient' + serialNumber;
-      newRadialGradient.setAttributeNode(newRadialGradientAttribs);
-      newRadialGradientAttribs = document.createAttribute('cx');
-      newRadialGradientAttribs.value = '30%';
-      newRadialGradient.setAttributeNode(newRadialGradientAttribs);
-      newRadialGradientAttribs = document.createAttribute('cy');
-      newRadialGradientAttribs.value = '30%';
-      newRadialGradient.setAttributeNode(newRadialGradientAttribs);
-      newRadialGradientAttribs = document.createAttribute('r');
-      newRadialGradientAttribs.value = '70%';
-      newRadialGradient.setAttributeNode(newRadialGradientAttribs);
-
-      let newRadialGradientStop1 = document.createElementNS('http://www.w3.org/2000/svg','stop');
-      let newRadialGradientStop1Attribs = document.createAttribute('offset');
-      newRadialGradientStop1Attribs.value = '0%';
-      newRadialGradientStop1.setAttributeNode(newRadialGradientStop1Attribs);
-      newRadialGradientStop1Attribs = document.createAttribute('stop-color');
-      newRadialGradientStop1Attribs.value = '#FF4444';
-      newRadialGradientStop1.setAttributeNode(newRadialGradientStop1Attribs);
-
-      let newRadialGradientStop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-      let newRadialGradientStop2Attribs = document.createAttribute('offset');
-      newRadialGradientStop2Attribs.value = '100%';
-      newRadialGradientStop2.setAttributeNode(newRadialGradientStop2Attribs);
-      newRadialGradientStop2Attribs = document.createAttribute('stop-color');
-      newRadialGradientStop2Attribs.value = '#CC0000';
-      newRadialGradientStop2.setAttributeNode(newRadialGradientStop2Attribs);
-      newRadialGradient.appendChild(newRadialGradientStop1);
-      newRadialGradient.appendChild(newRadialGradientStop2);
-      newDefs.appendChild(newRadialGradient);
-
-      let newCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      let newCircleAttribs = document.createAttribute('cx');
-      newCircleAttribs.value = '10';
-      newCircle.setAttributeNode(newCircleAttribs);
-      newCircleAttribs = document.createAttribute('cy');
-      newCircleAttribs.value = '10';
-      newCircle.setAttributeNode(newCircleAttribs);
-      newCircleAttribs = document.createAttribute('r');
-      newCircleAttribs.value = '10';
-      newCircle.setAttributeNode(newCircleAttribs);
-      newCircleAttribs = document.createAttribute('fill');
-      newCircleAttribs.value = 'url(#ballGradient' + serialNumber + ')';
-      newCircle.setAttributeNode(newCircleAttribs);
-      
-      
-      newSVG.appendChild(newDefs);
-      newSVG.appendChild(newCircle);
-
-      ElementObject.appendChild(newSVG);
-    }
-
-    /**
-     * 隐藏SVG元素的函数
-     * @param {Number} serialNumber - SVG元素的序列号
-     */
-    function hideSvg(serialNumber) {
-      let svg = document.getElementById('mySvg' + serialNumber);
-      // 显示类型为none的元素不会占据任何空间，不会影响布局
-      // svg.style.display = 'none';
-
-      svg.style.transform = 'translate(-1em, 1em)';
-      svg.style.zIndex = -1;
-    }
-
-    function loadBallSpinning(){
-      let ball = document.getElementsByClassName('round');
-      for (let i = 0; i < ball.length; i++) {
-        // 触发小球转圈动画
-        ball[i].style.display = 'block';
-        // 重新隐藏小球转圈动画
-        setTimeout(() => {
-          ball[i].style.display= 'none';
-        }, 1400);
-      }
-    }
-
-    let news = document.getElementsByClassName('news');
-    news[0].style.display = 'inline-block';
-    let loader = document.getElementsByClassName('loadNext');
-    loader[0].addEventListener('click', () => {
-      loadNewsAndInformation('left');
-    });
-    loader[1].addEventListener('click', () => {
-      loadNewsAndInformation('right');
-    });
-    autoLoadNewsAndInformation();
-
-    let divLists = document.getElementsByClassName('content');
-    let endTime = [];
-    for (let i = 0; i < divLists.length; i++) {
-      endTime.push(i * 25 + 500);
-      divLists[i].style.animation = 'move-From ' + endTime[i] + 'ms ease 1 normal none running';
-      setTimeout(() => { loadSVG(divLists[i], i + 1); }, endTime[i]);
-    }
-
-    // 监听窗口大小变化，重新设置SVG元素位置
-    // window.addEventListener('resize', () => {
-    //   for (let i = 0; i < buttons.length; i++) {
-    //     setSVGPosition(svgs[i], buttons[i]);
-    //   }
-    // });
-
-    const rand = function (min, max) {
-      return Math.random() * (max - min) + min;
-    }
-    let canvas = document.getElementById('canvas');
-    let ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    window.addEventListener('resize', function () {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      ctx = canvas.getContext('2d');
-      ctx.globalCompositeOperation = 'lighter';
-    });
-    let backgroundColors = ['#000', '#000'];
-    let colors = [
-      ['#002aff', "#009ff2"],
-      ['#0054ff', '#27e49b'],
-      ['#202bc5', '#873dcc']
-    ];
-    let count = 70;
-    let blur = [12, 70];
-    let radius = [1, 120];
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.globalCompositeOperation = 'lighter';
-    let grd = ctx.createLinearGradient(0, canvas.height, canvas.width, 0);
-    grd.addColorStop(0, backgroundColors[0]);
-    grd.addColorStop(1, backgroundColors[1]);
-    ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    let items = [];
-    while (count--) {
-      let thisRadius = rand(radius[0], radius[1]);
-      let thisBlur = rand(blur[0], blur[1]);
-      let x = rand(-100, canvas.width + 100);
-      let y = rand(-100, canvas.height + 100);
-      let colorIndex = Math.floor(rand(0, 299) / 100);
-      let colorOne = colors[colorIndex][0];
-      let colorTwo = colors[colorIndex][1];
-      ctx.beginPath();
-      ctx.filter = `blur(${thisBlur}px)`;
-      let grd = ctx.createLinearGradient(x - thisRadius / 2, y - thisRadius / 2, x + thisRadius, y + thisRadius);
-      grd.addColorStop(0, colorOne);
-      grd.addColorStop(1, colorTwo);
-      ctx.fillStyle = grd;
-      ctx.fill();
-      ctx.arc(x, y, thisRadius, 0, Math.PI * 2);
-      ctx.closePath();
-      let directionX = Math.round(rand(-99, 99) / 100);
-      let directionY = Math.round(rand(-99, 99) / 100);
-      items.push({
-        x: x,
-        y: y,
-        blur: thisBlur,
-        radius: thisRadius,
-        initialXDirection: directionX,
-        initialYDirection: directionY,
-        initialBlurDirection: directionX,
-        colorOne: colorOne,
-        colorTwo: colorTwo,
-        gradient: [x - thisRadius / 2, y - thisRadius / 2, x + thisRadius, y + thisRadius],
-      });
-    }
-    function changeCanvas(timestamp) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      let adjX = 2;
-      let adjY = 2;
-      let adjBlur = 1;
-      items.forEach(function (item) {
-        if (item.x + (item.initialXDirection * adjX) >= canvas.width && item.initialXDirection !== 0 || item.x + (item.initialXDirection * adjX) <= 0 && item.initialXDirection !== 0) {
-          item.initialXDirection = item.initialXDirection * -1;
+            setTimeout(() => {
+                propmt.remove();
+            }, 1500);
         }
-        if (item.y + (item.initialYDirection * adjY) >= canvas.height && item.initialYDirection !== 0 || item.y + (item.initialYDirection * adjY) <= 0 && item.initialYDirection !== 0) {
-          item.initialYDirection = item.initialYDirection * -1;
+
+        function lazyCopyMode(){
+            let hageRoot = document.querySelector('containter');
+            let contentDivs = document.getElementsByClassName('bubble');
+            for (let i = 0; i < contentDivs.length; i++) {
+              // 把所有p元素的内容改成 发送+序号
+              contentDivs[i].querySelector('p').textContent = `发送${i+1}`;
+              // 让所有泡泡变得更小，使得页面能够容下更多泡泡
+              contentDivs[i].style.width = '75px';
+              contentDivs[i].style.height = '75px';
+            }
+            let SerialNumbers = [];0
+            // 重新添加点击事件监听，点击 发送+序号 按钮，将序号记录到数组中
+            for (let i = 0; i < contentDivs.length; i++) {
+              contentDivs[i].removeEventListener('click', EvEntLists[i]);
+              contentDivs[i].addEventListener('click', () => {
+                SerialNumbers.push(i);
+
+                // 向用户提示
+                document.body.innerHTML += `<p class="prompt">发送${SerialNumbers[isterminal]+1}</p>`;
+
+                // 移除提示
+                setTimeout(() => {
+                    document.body.querySelector('.prompt').remove();
+                    }, 1500);
+              });
+            }
+
+            let buttonText = ['开始/重新开始发送', '暂停发送', '继续发送', '停止发送'];
+            let buttonElement = [];
+            for (let i = 0; i < buttonText.length; i++) {
+                // 添加新的泡泡，充当按钮
+                const newBubble = document.createElement('div');
+                newBubble.className = 'bubble';
+
+                // 添加段落，显示按钮文字
+                newBubble.innerHTML = `<p>${buttonText[i]}</p>`;
+
+                contentDivs[0].insertAdjacentElement('beforebegin', newBubble);
+                buttonElement.push(newBubble);
+            }
+
+            let timers = [];
+            let isSending = [];
+            // 点击 开始/重新开始发送 按钮
+            buttonElement[0].addEventListener('click', () => {
+                // 开始向剪贴板发送泡泡内容，设定定时器，每隔10s发送一个泡泡
+                for (let i = 0; i < SerialNumbers.length; i++) {
+                    const currentContent = copycontent[SerialNumbers[i]];
+                    const isterminal = i;
+                    timers[i] = setTimeout(async () => { 
+                        await copyTextToClipboard(currentContent); 
+                        isSending[isterminal] = true; // 标记该泡泡发送完成
+
+                        // 发送完毕时，向用户提示发送成功
+                        document.body.innerHTML += `
+                            <p class="prompt">第${SerialNumbers[isterminal]+1}条消息已复制到剪贴板</p>`;
+
+                        // 移除提示
+                        setTimeout(() => {
+                            document.body.querySelector('.prompt').remove();
+                        }, 1500);
+                    }, 1000 + i * 10000);
+                }
+            });
+            // 点击 暂停发送 按钮
+            buttonElement[1].addEventListener('click', () => {
+                for (let i = 0; i < timers.length; i++) {
+                    clearTimeout(timers[i]);
+                }
+            });
+
+            // 点击 继续发送 按钮
+            buttonElement[2].addEventListener('click', () => {
+                for (let i = 0; i < SerialNumbers.length; i++) {
+                    if (!isSending[i]) {
+                        const currentContent = copycontent[SerialNumbers[i]];
+                        const isterminal = i;
+                        timers[i] = setTimeout(async () => { 
+                            await copyTextToClipboard(currentContent); 
+                            isSending[isterminal] = true; // 标记该泡泡发送完成
+
+                            // 发送完毕时，向用户提示发送成功
+                            document.body.innerHTML += `
+                                <p class="prompt">第${SerialNumbers[isterminal]+1}条消息已复制到剪贴板</p>`;
+
+                            // 移除提示
+                            setTimeout(() => {
+                                document.body.querySelector('.prompt').remove();
+                                }, 1500);
+                        }, 1000 + i * 10000);
+                    }
+                }
+            });
+
+            // 点击 停止发送 按钮
+            buttonElement[3].addEventListener('click', () => {
+                for (let i = 0; i < timers.length; i++) {
+                    clearTimeout(timers[i]);
+                    isSending[i] = false; // TODO: 停止发送后，还需要将isSending数组清空
+                }
+            });
+
         }
-        if (item.blur + (item.initialBlurDirection * adjBlur) >= radius[1] && item.initialBlurDirection !== 0 || item.blur + (item.initialBlurDirection * adjBlur) <= radius[0] && item.initialBlurDirection !== 0) {
-          item.initialBlurDirection *= -1;
-        }
-        item.x += (item.initialXDirection * adjX);
-        item.y += (item.initialYDirection * adjY);
-        item.blur += (item.initialBlurDirection * adjBlur);
-        ctx.beginPath();
-        ctx.filter = `blur(${item.blur}px)`;
-        let grd = ctx.createLinearGradient(item.gradient[0], item.gradient[1], item.gradient[2], item.gradient[3]);
-        grd.addColorStop(0, item.colorOne);
-        grd.addColorStop(1, item.colorTwo);
-        ctx.fillStyle = grd;
-        ctx.arc(item.x, item.y, item.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
-      });
-      window.requestAnimationFrame(changeCanvas);
-    }
-    window.requestAnimationFrame(changeCanvas);
-  </script>
-</body>  
-</html>    
+
+        // let crumbLists = document.getElementsByClassName('crumb');
+
+        // crumbLists[0].style.backgroundColor = 'darkgray';
+        // crumbLists[0].addEventListener('click', () => {
+        //   crumbLists[0].style.backgroundColor = 'darkgray';
+        //   crumbLists[1].style.backgroundColor = '';
+        // });
+        // crumbLists[1].addEventListener('click', () => {
+        //   crumbLists[0].style.backgroundColor = '';
+        //   crumbLists[1].style.backgroundColor = 'darkgray';
+        //   lazyCopyMode();
+        // });
+
+        document.querySelectorAll('.bubble').forEach(bubble => {
+            const currentContent = copycontent[count];
+            EvEntLists.push(function () {
+                copyTextToClipboard(currentContent);
+
+                // 生成12个水珠碎片
+                for (let i = 0; i < 12; i++) {
+                    const debris = document.createElement('div');
+                    debris.className = 'debris';
+
+                    // 设置随机运动参数
+                    debris.style.setProperty('--x', Math.random());
+                    debris.style.setProperty('--y', Math.random());
+                    // 替换原来的left/top设置代码
+                    const rect = bubble.getBoundingClientRect();
+                    const bubbleCenterX = rect.left + rect.width / 2;
+                    const bubbleCenterY = rect.top + rect.height / 2;
+
+                    debris.style.left = `${bubbleCenterX}px`;
+                    debris.style.top = `${bubbleCenterY}px`;
+
+
+                    // 添加碎片到容器
+                    document.body.appendChild(debris);
+
+                    // 自动移除碎片
+                    debris.addEventListener('animationend', () => {
+                        debris.remove();
+                    });
+                }
+
+                // 模拟泡泡扩散效果
+                for (let i = 1; i < 4; i++) {
+                    setTimeout(() => {
+                        const _scale = 1 + i * 0.2;
+                        const _opacity = 1 - i * 0.2;
+                        this.style.transform = `scale(${_scale})`;
+                        this.style.opacity = _opacity;
+                    }, i * 100);
+                }
+
+                // 移除泡泡，文字正常显示
+                setTimeout(() => {
+                    this.style.visibility = 'hidden';
+                    this.style.opacity = 1;
+                }, 400);
+            });
+            count++;
+            bubble.addEventListener('click', EvEntLists[count - 1]);
+        });
+    </script>
+</body>
+
+</html>
