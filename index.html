@@ -9,26 +9,6 @@
     <meta name="color-scheme" content="light">
     <title>短语复制工具</title>
     <style>
-        :root {
-            color-scheme: light;
-            --primary-bg: rgb(254, 249, 215);
-            --secondary-bg: rgb(210, 153, 194);
-            --bubble-gradient: radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
-            --debris-gradient: radial-gradient(circle at 30% 30%, rgb(255, 255, 255) 20%, rgb(255, 33, 192) 70%);
-        }
-
-        /* 确保所有元素都使用浅色模式 */
-        * {
-            color: black !important;
-        }
-
-        /* 确保深色模式下也使用浅色配置 */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                color-scheme: light;
-            }
-        }
-
         nav {
             position: relative;
             border-bottom: 1px solid black;
@@ -43,7 +23,7 @@
         .crumb {
             display: inline-block;
             position: relative;
-            color: white !important;
+            color: white;
             padding: 2em 1em;
             border-collapse: collapse;
             cursor: pointer;
@@ -51,7 +31,7 @@
 
         .crumb:hover {
             text-decoration: underline;
-            color: #ff6ac6 !important;
+            color: #ff6ac6;
         }
 
         body {
@@ -65,16 +45,31 @@
         .container {
             position: fixed;
             overflow: scroll;
-            background: linear-gradient(150deg, var(--secondary-bg), var(--primary-bg));
+            background: linear-gradient(150deg, rgb(210, 153, 194), rgb(254, 249, 215));
             width: 100%;
             height: 100%;
+        }
+
+        /* 确保深色模式下颜色不变 */
+        @media (prefers-color-scheme: dark) {
+            .container {
+                background: linear-gradient(150deg, rgb(210, 153, 194), rgb(254, 249, 215));
+            }
+            
+            .bubble {
+                background: radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
+            }
+            
+            .debris {
+                background: radial-gradient(circle at 30% 30%, rgb(255, 255, 255) 20%, rgb(255, 33, 192) 70%);
+            }
         }
 
         .bubble {
             width: 150px;
             height: 150px;
             display: inline-block;
-            background: var(--bubble-gradient);
+            background: radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
             border-radius: 50%;
             box-shadow: inset 0 0 20px #fff,
                 inset 10px 0 46px #eaf5fc,
@@ -90,7 +85,7 @@
             width: 150px;
             height: 150px;
             display: inline-block;
-            background: var(--bubble-gradient);
+            background: radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
             border-radius: 50%;
             box-shadow: inset 0 0 20px #fff,
                 inset 10px 0 46px #eaf5fc,
@@ -109,7 +104,7 @@
             left: 50%;
             transform: translate(-50%, -75%);
             font-size: 1em;
-            color: #fff !important;
+            color: #fff;
             text-align: center;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -133,7 +128,7 @@
             position: absolute;
             width: 8px;
             height: 8px;
-            background: var(--debris-gradient);
+            background: radial-gradient(circle at 30% 30%, rgb(255, 255, 255) 20%, rgb(255, 33, 192) 70%);
             border-radius: 50%;
             opacity: 0.9;
             animation: debris-fly 0.8s ease-out forwards;
@@ -158,8 +153,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 1em;
-            color: white !important;
-            background-color: darkgray !important;
+            color: white;
+            background-color: darkgray;
             text-align: center;
             animation: prompt-appear 1.5s ease-in-out forwards;
             pointer-events: none;
