@@ -9,56 +9,63 @@
     <meta name="color-scheme" content="light">
     <title>短语复制工具</title>
     <style>
+        :root {
+            color-scheme: light;
+            --primary-bg: rgb(254, 249, 215);
+            --secondary-bg: rgb(210, 153, 194);
+            --bubble-gradient: radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
+            --debris-gradient: radial-gradient(circle at 30% 30%, rgb(255, 255, 255) 20%, rgb(255, 33, 192) 70%);
+        }
+
+        /* 确保所有元素都使用浅色模式 */
+        * {
+            color: black !important;
+        }
+
+        /* 确保深色模式下也使用浅色配置 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                color-scheme: light;
+            }
+        }
+
         nav {
-          position: relative;
-          border-bottom: 1px solid black;
-          z-index: 500;
+            position: relative;
+            border-bottom: 1px solid black;
+            z-index: 500;
         }
 
         .pageNavigation ol {
-          list-style-type: none;
-          padding-left: 0;
+            list-style-type: none;
+            padding-left: 0;
         }
 
         .crumb {
-          display: inline-block;
-          position: relative;
-          color: white;
-          padding: 2em 1em;
-          border-collapse: collapse;
-          cursor: pointer;
+            display: inline-block;
+            position: relative;
+            color: white !important;
+            padding: 2em 1em;
+            border-collapse: collapse;
+            cursor: pointer;
         }
 
         .crumb:hover {
-          text-decoration: underline;
-          color: #ff6ac6;
+            text-decoration: underline;
+            color: #ff6ac6 !important;
         }
-    </style>  
 
-    <style>
         body {
             position: relative;
             overflow: hidden;
-            /*188%窗口高度 */
             height: 100vh;
-            /*弹性布局 居中显示 */
-            /**display: flex;*/
-            /**justify-content: center;*/
-            /**align-items: center;*/
-
             display: flex;
             flex: 150px 150px auto;
         }
-        
+
         .container {
-            /* 相对定位 */
             position: fixed;
             overflow: scroll;
-            /*渐变背景 */
-            background: -webkit-linear-gradient(150deg, rgb(210, 153, 194), rgb(254, 249, 215));
-            background: -moz-linear-gradient(150deg, rgb(210, 153, 194), rgb(254, 249, 215));
-            background: -o-linear-gradient(150deg, rgb(210, 153, 194), rgb(254, 249, 215));
-            background: linear-gradient(150deg, rgb(210, 153, 194), rgb(254, 249, 215));
+            background: linear-gradient(150deg, var(--secondary-bg), var(--primary-bg));
             width: 100%;
             height: 100%;
         }
@@ -67,69 +74,49 @@
             width: 150px;
             height: 150px;
             display: inline-block;
-            /*径向渐变 */
-            background: -webkit-radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
-            background: -moz-radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
-            background: -o-radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
-            background: radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
+            background: var(--bubble-gradient);
             border-radius: 50%;
-            /*阴影 */
             box-shadow: inset 0 0 20px #fff,
                 inset 10px 0 46px #eaf5fc,
                 inset 80px 0 60px #efcde6,
                 inset -20px -60px 100px #f9f6de,
                 inset 0 50px 140px #f9f6de,
                 0 0 90px #fff;
-            
             margin: 1em 1em;
-            /*执行动画:动画名 时长 加速后减速 无限次播放*/
             animation: bubble 4s ease-in-out infinite;
         }
-        /* 为第一行泡泡预留动画移动距离的位置 */
-        .bubble:nth-child(2) { /* 第二个子元素是第一行 */
+
+        .bubble:nth-child(2) {
             width: 150px;
             height: 150px;
             display: inline-block;
-            /*径向渐变 */
-            background: -webkit-radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
-            background: -moz-radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
-            background: -o-radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
-            background: radial-gradient(circle at 75% 30%, rgb(255, 255, 255) 5px, rgb(255, 33, 192) 8%, rgb(91, 91, 91) 60%, rgb(255, 33, 192) 100%);
+            background: var(--bubble-gradient);
             border-radius: 50%;
-            /*阴影 */
             box-shadow: inset 0 0 20px #fff,
                 inset 10px 0 46px #eaf5fc,
                 inset 80px 0 60px #efcde6,
                 inset -20px -60px 100px #f9f6de,
                 inset 0 50px 140px #f9f6de,
                 0 0 90px #fff;
-            /*动画移动距离*/
             margin: 80px 1em 1em 1em;
-            /*执行动画:动画名 时长 加速后减速 无限次播放*/
             animation: bubble 4s ease-in-out infinite;
         }
 
         .bubble p {
             visibility: visible;
-            /* 绝对定位 */
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -75%);
-            /*字体大小 */
             font-size: 1em;
-            /*字体颜色 */
-            color: #fff;
-            /*字体居中 */
+            color: #fff !important;
             text-align: center;
-            /*防止选中干扰点击 */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
         }
 
-        /*泡泡浮动动画*/
         @keyframes bubble {
 
             0%,
@@ -141,18 +128,12 @@
                 transform: translateY(-80px);
             }
         }
-    </style>
 
-    <style>
-        /* 新增水珠碎片样式 */
         .debris {
             position: absolute;
             width: 8px;
             height: 8px;
-            background: -webkit-radial-gradient(circle at 30% 30%, rgb(255, 255, 255) 20%, rgb(255, 33, 192) 70%);
-            background: -moz-radial-gradient(circle at 30% 30%, rgb(255, 255, 255) 20%, rgb(255, 33, 192) 70%);
-            background: -o-radial-gradient(circle at 30% 30%, rgb(255, 255, 255) 20%, rgb(255, 33, 192) 70%);
-            background: radial-gradient(circle at 30% 30%, rgb(255, 255, 255) 20%, rgb(255, 33, 192) 70%);
+            background: var(--debris-gradient);
             border-radius: 50%;
             opacity: 0.9;
             animation: debris-fly 0.8s ease-out forwards;
@@ -170,18 +151,15 @@
                 opacity: 0;
             }
         }
-    </style>
 
-    <style>
-        /* 新增提示信息样式 */
         .prompt {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 1em;
-            color: white;
-            background-color: darkgray;
+            color: white !important;
+            background-color: darkgray !important;
             text-align: center;
             animation: prompt-appear 1.5s ease-in-out forwards;
             pointer-events: none;
@@ -193,11 +171,12 @@
                 transform: translateY(0);
                 opacity: 1;
             }
+
             50% {
                 transform: translateY(-50px);
                 opacity: 1;
             }
-            
+
             100% {
                 transform: translateY(-100px);
                 opacity: 0;
@@ -209,220 +188,113 @@
 <body>
 
     <div class="container">
-      <!-- <nav class="pageNavigation"> -->
-      <!--   <ol> -->
-      <!--     <li class="crumb">自由复制模式</li> -->
-      <!--     <li class="crumb">懒人复制模式</li> -->
-      <!--   </ol> -->
-      <!-- </nav> -->
-      <div class="bubble"><p>1.夏天到啦</p> </div>
-      <div class="bubble"><p>2.轻风启夏热忱满载</p> </div>
-      <div class="bubble"><p>3.芳菲歇去何须恨</p> </div>
-      <div class="bubble"><p>4.夏木阴阴正可人</p> </div>
-      <div class="bubble"><p>5.暮春作别初夏相迎</p> </div>
-      <div class="bubble"><p>6.四时流转万物并秀</p> </div>
-      <div class="bubble"><p>7.初夏予你清风</p> </div>
-      <div class="bubble"><p>8.愿你心随流云自在悠扬</p> </div>
-      <div class="bubble"><p>9.让欢愉似莲叶舒展</p> </div>
-      <div class="bubble"><p>10.让福气如繁星满窗</p> </div>
-      <div class="bubble"><p>11.愿每个日子都奔涌希望</p> </div>
-      <div class="bubble"><p>12.愿你在绿荫蝉鸣里拾得整季清欢</p> </div>
-      <div class="bubble"><p>13.槐荫初密夏意渐浓</p> </div>
-      <div class="bubble"><p>14.推窗可摘青梅嗅</p> </div>
-      <div class="bubble"><p>15.午后闲听竹簟幽</p> </div>
-      <div class="bubble"><p>16.夕照染霞烹茶饮</p> </div>
-      <div class="bubble"><p>17.夜揽流萤入画轴</p> </div>
-      <div class="bubble"><p>18.春笺未干续夏章</p> </div>
-      <div class="bubble"><p>19.告别春日的慵懒</p> </div>
-      <div class="bubble"><p>20.点燃夏日的热情</p> </div>
-      <div class="bubble"><p>21.以梦为马不负时光</p> </div>
-      <div class="bubble"><p>22.夏日的风吹来了夏天的消息</p> </div>
-      <div class="bubble"><p>23.夏日的雨滋润了希望的萌芽</p> </div>
-      <div class="bubble"><p>24.愿你如夏日的骄阳充满能量</p> </div>
-      <div class="bubble"><p>25.如绽放的荷花清新脱俗</p> </div>
-      <div class="bubble"><p>26.烦恼在夏日的热浪中消散</p> </div>
-      <div class="bubble"><p>27.幸福在季节的变换中沉淀</p> </div>
-      <div class="bubble"><p>28.带着春的希望拥抱夏的热忱</p> </div>
-      <div class="bubble"><p>29.心中有清凉</p> </div>
-      <div class="bubble"><p>30.眼里有光芒</p> </div>
-      <div class="bubble"><p>31.晨起迎朝阳</p> </div>
-      <div class="bubble"><p>32.暮归伴星光</p> </div>
-      <div class="bubble"><p>33.如禾苗般拔节生长</p> </div>
-      <div class="bubble"><p>34.如向日葵般追逐阳光</p> </div>
-      <div class="bubble"><p>35.祝你盛夏有闲趣</p> </div>
-      <div class="bubble"><p>36.好运如阳光般照耀你</p> </div>
-      <div class="bubble"><p>37.快乐如清风般环绕你</p> </div>
-      <div class="bubble"><p>38.健康如云朵般庇护你</p> </div>
-      <div class="bubble"><p>39.快雨知春尽</p> </div>
-      <div class="bubble"><p>40.鸣禽觉夏初</p> </div>
-      <div class="bubble"><p>41.日高槐影直</p> </div>
-      <div class="bubble"><p>42.风细竹声疏</p> </div>
-      <div class="bubble"><p>43.四月清和雨乍晴</p> </div>
-      <div class="bubble"><p>44.南山当户转分明</p> </div>
-      <div class="bubble"><p>45.更无柳絮因风起</p> </div>
-      <div class="bubble"><p>46.惟有葵花向日倾</p> </div>
-      <div class="bubble"><p>47.谢却海棠飞尽絮</p> </div>
-      <div class="bubble"><p>48.困人天气日初长</p> </div>
-      <div class="bubble"><p>49.一枝斜插蓝罗扇</p> </div>
-      <div class="bubble"><p>50.摇动时时送好香</p> </div>
-      <!-- <div class="bubble"><p>51.劳动节快乐</p> </div> -->
-      <!-- <div class="bubble"><p>52.劳动光荣汗水生辉</p> </div> -->
-      <!-- <div class="bubble"><p>53.汗水为墨写春秋</p> </div> -->
-      <!-- <div class="bubble"><p>54.勤耕不辍勇创未来</p> </div> -->
-      <!-- <div class="bubble"><p>55.劳动传薪火</p> </div> -->
-      <!-- <div class="bubble"><p>56.五一展荣光</p> </div> -->
-      <!-- <div class="bubble"><p>57.辛勤育希望</p> </div> -->
-      <!-- <div class="bubble"><p>58.劳动创辉煌</p> </div> -->
-      <!-- <div class="bubble"><p>59.双手绘蓝图</p> </div> -->
-      <!-- <div class="bubble"><p>60.五一福满堂</p> </div> -->
-      <!-- <div class="bubble"><p>61.拼搏正当时</p> </div> -->
-      <!-- <div class="bubble"><p>62.辛勤育硕果</p> </div> -->
-      <!-- <div class="bubble"><p>63.奋斗正启航</p> </div> -->
-      <!-- <div class="bubble"><p>64.今天向劳动者致敬</p> </div> -->
-      <!-- <div class="bubble"><p>65.给每个辛勤劳作的朋友送去祝福</p> </div> -->
-      <!-- <div class="bubble"><p>66.人民最伟大</p> </div> -->
-      <!-- <div class="bubble"><p>67.劳动最光荣</p> </div> -->
-      <!-- <div class="bubble"><p>68.弘扬劳模精神</p> </div> -->
-      <!-- <div class="bubble"><p>69.争当时代先锋</p> </div> -->
-      <!-- <div class="bubble"><p>70.放假五天要跟大乔呆在一起</p> </div> -->
-      <!-- <div class="bubble"><p>71.刘备祝你有个美好的假期</p> </div> -->
-      <!-- <div class="bubble"><p>72.五一劳动节劳动最光荣</p> </div> -->
-      <!-- <div class="bubble"><p>73.祝你有个美好的假期</p> </div> -->
-      <!-- <div class="bubble"><p>74.心情放轻松</p> </div> -->
-      <!-- <div class="bubble"><p>75.快乐在其中</p> </div> -->
-      <!-- <div class="bubble"><p>76.享受美好风光</p> </div> -->
-      <!-- <div class="bubble"><p>77.将烦恼抛去</p> </div> -->
-      <!-- <div class="bubble"><p>78.开心快乐在</p> </div> -->
-      <!-- <div class="bubble"><p>79.好事自然来</p> </div> -->
-      <!-- <div class="bubble"><p>80.祝大家生活有希望吃肉不长胖</p> </div> -->
-      <!-- <div class="bubble"><p>81.劳动节记得多陪陪家人</p> </div> -->
-      <!-- <div class="bubble"><p>82.注意身体健康</p> </div> -->
-      <!-- <div class="bubble"><p>83.身体是革命的本钱</p> </div> -->
-      <!-- <div class="bubble"><p>84.用健康的身体去更好的奋斗</p> </div> -->
-      <!-- <div class="bubble"><p>85.幸福的生活要靠劳动来获取</p> </div> -->
-      <!-- <div class="bubble"><p>86.一直在路上奋斗</p> </div> -->
-      <!-- <div class="bubble"><p>87.努力到感动自己</p> </div> -->
-      <!-- <div class="bubble"><p>88.致敬为梦想步履不停的你</p> </div> -->
-      <!-- <div class="bubble"><p>89.世界因你而更加美丽</p> </div> -->
-      <!-- <div class="bubble"><p>90.生命不息劳动不止</p> </div> -->
-      <!-- <div class="bubble"><p>91.今天要放纵自己睡个懒觉</p> </div> -->
-      <!-- <div class="bubble"><p>92.劳动节一起鼓足干劲</p> </div> -->
-      <!-- <div class="bubble"><p>93.劳动节力争上游</p> </div> -->
-      <!-- <div class="bubble"><p>94.劳动节劳动能一夜暴富吗</p> </div> -->
-      <!-- <div class="bubble"><p>95.劳动节我要躺五天</p> </div> -->
-      <!-- <div class="bubble"><p>96.劳动节大家准备去哪里玩</p> </div> -->
-      <!-- <div class="bubble"><p>97.劳动节天道酬勤</p> </div> -->
-      <!-- <div class="bubble"><p>98.劳动节不负光阴</p> </div> -->
-      <!-- <div class="bubble"><p>99.劳动节放三2见</p> </div> -->
-      <!-- <div class="bubble"><p>100.劳动节轻松找快乐</p> </div> -->
+        <div class="bubble"><p>1.夏天到啦</p> </div>
+        <div class="bubble"><p>2.轻风启夏热忱满载</p> </div>
+        <div class="bubble"><p>3.芳菲歇去何须恨</p> </div>
+        <div class="bubble"><p>4.夏木阴阴正可人</p> </div>
+        <div class="bubble"><p>5.暮春作别初夏相迎</p> </div>
+        <div class="bubble"><p>6.四时流转万物并秀</p> </div>
+        <div class="bubble"><p>7.初夏予你清风</p> </div>
+        <div class="bubble"><p>8.愿你心随流云自在悠扬</p> </div>
+        <div class="bubble"><p>9.让欢愉似莲叶舒展</p> </div>
+        <div class="bubble"><p>10.让福气如繁星满窗</p> </div>
+        <div class="bubble"><p>11.愿每个日子都奔涌希望</p> </div>
+        <div class="bubble"><p>12.愿你在绿荫蝉鸣里拾得整季清欢</p> </div>
+        <div class="bubble"><p>13.槐荫初密夏意渐浓</p> </div>
+        <div class="bubble"><p>14.推窗可摘青梅嗅</p> </div>
+        <div class="bubble"><p>15.午后闲听竹簟幽</p> </div>
+        <div class="bubble"><p>16.夕照染霞烹茶饮</p> </div>
+        <div class="bubble"><p>17.夜揽流萤入画轴</p> </div>
+        <div class="bubble"><p>18.春笺未干续夏章</p> </div>
+        <div class="bubble"><p>19.告别春日的慵懒</p> </div>
+        <div class="bubble"><p>20.点燃夏日的热情</p> </div>
+        <div class="bubble"><p>21.以梦为马不负时光</p> </div>
+        <div class="bubble"><p>22.夏日的风吹来了夏天的消息</p> </div>
+        <div class="bubble"><p>23.夏日的雨滋润了希望的萌芽</p> </div>
+        <div class="bubble"><p>24.愿你如夏日的骄阳充满能量</p> </div>
+        <div class="bubble"><p>25.如绽放的荷花清新脱俗</p> </div>
+        <div class="bubble"><p>26.烦恼在夏日的热浪中消散</p> </div>
+        <div class="bubble"><p>27.幸福在季节的变换中沉淀</p> </div>
+        <div class="bubble"><p>28.带着春的希望拥抱夏的热忱</p> </div>
+        <div class="bubble"><p>29.心中有清凉</p> </div>
+        <div class="bubble"><p>30.眼里有光芒</p> </div>
+        <div class="bubble"><p>31.晨起迎朝阳</p> </div>
+        <div class="bubble"><p>32.暮归伴星光</p> </div>
+        <div class="bubble"><p>33.如禾苗般拔节生长</p> </div>
+        <div class="bubble"><p>34.如向日葵般追逐阳光</p> </div>
+        <div class="bubble"><p>35.祝你盛夏有闲趣</p> </div>
+        <div class="bubble"><p>36.好运如阳光般照耀你</p> </div>
+        <div class="bubble"><p>37.快乐如清风般环绕你</p> </div>
+        <div class="bubble"><p>38.健康如云朵般庇护你</p> </div>
+        <div class="bubble"><p>39.快雨知春尽</p> </div>
+        <div class="bubble"><p>40.鸣禽觉夏初</p> </div>
+        <div class="bubble"><p>41.日高槐影直</p> </div>
+        <div class="bubble"><p>42.风细竹声疏</p> </div>
+        <div class="bubble"><p>43.四月清和雨乍晴</p> </div>
+        <div class="bubble"><p>44.南山当户转分明</p> </div>
+        <div class="bubble"><p>45.更无柳絮因风起</p> </div>
+        <div class="bubble"><p>46.惟有葵花向日倾</p> </div>
+        <div class="bubble"><p>47.谢却海棠飞尽絮</p> </div>
+        <div class="bubble"><p>48.困人天气日初长</p> </div>
+        <div class="bubble"><p>49.一枝斜插蓝罗扇</p> </div>
+        <div class="bubble"><p>50.摇动时时送好香</p> </div>
     </div>
-    
+
     <script>
         let copycontent = [
-                "夏天到啦",
-                "轻风启夏热忱满载",
-                "芳菲歇去何须恨",
-                "夏木阴阴正可人",
-                "暮春作别初夏相迎",
-                "四时流转万物并秀",
-                "初夏予你清风",
-                "愿你心随流云自在悠扬",
-                "让欢愉似莲叶舒展",
-                "让福气如繁星满窗",
-                "愿每个日子都奔涌希望",
-                "愿你在绿荫蝉鸣里拾得整季清欢",
-                "槐荫初密夏意渐浓",
-                "推窗可摘青梅嗅",
-                "午后闲听竹簟幽",
-                "夕照染霞烹茶饮",
-                "夜揽流萤入画轴",
-                "春笺未干续夏章",
-                "告别春日的慵懒",
-                "点燃夏日的热情",
-                "以梦为马不负时光",
-                "夏日的风吹来了夏天的消息",
-                "夏日的雨滋润了希望的萌芽",
-                "愿你如夏日的骄阳充满能量",
-                "如绽放的荷花清新脱俗",
-                "烦恼在夏日的热浪中消散",
-                "幸福在季节的变换中沉淀",
-                "带着春的希望拥抱夏的热忱",
-                "心中有清凉",
-                "眼里有光芒",
-                "晨起迎朝阳",
-                "暮归伴星光",
-                "如禾苗般拔节生长",
-                "如向日葵般追逐阳光",
-                "祝你盛夏有闲趣",
-                "好运如阳光般照耀你",
-                "快乐如清风般环绕你",
-                "健康如云朵般庇护你",
-                "快雨知春尽",
-                "鸣禽觉夏初",
-                "日高槐影直",
-                "风细竹声疏",
-                "四月清和雨乍晴",
-                "南山当户转分明",
-                "更无柳絮因风起",
-                "惟有葵花向日倾",
-                "谢却海棠飞尽絮",
-                "困人天气日初长",
-                "一枝斜插蓝罗扇",
-                "摇动时时送好香",
-                //"劳动节快乐",
-                //"劳动光荣汗水生辉",
-                //"汗水为墨写春秋",
-                //"勤耕不辍勇创未来",
-                //"劳动传薪火",
-                //"五一展荣光",
-                //"辛勤育希望",
-                //"劳动创辉煌",
-                //"双手绘蓝图",
-                //"五一福满堂",
-                //"拼搏正当时",
-                //"辛勤育硕果",
-                //"奋斗正启航",
-                //"今天向劳动者致敬",
-                //"给每个辛勤劳作的朋友送去祝福",
-                //"人民最伟大",
-                //"劳动最光荣",
-                //"弘扬劳模精神",
-                //"争当时代先锋",
-                //"放假五天要跟大乔呆在一起",
-                //"刘备祝你有个美好的假期",
-                //"五一劳动节劳动最光荣",
-                //"祝你有个美好的假期",
-                //"心情放轻松",
-                //"快乐在其中",
-                //"享受美好风光",
-                //"将烦恼抛去",
-                //"开心快乐在",
-                //"好事自然来",
-                //"祝大家生活有希望吃肉不长胖",
-                //"劳动节记得多陪陪家人",
-                //"注意身体健康",
-                //"身体是革命的本钱",
-                //"用健康的身体去更好的奋斗",
-                //"幸福的生活要靠劳动来获取",
-                //"一直在路上奋斗",
-                //"努力到感动自己",
-                //"致敬为梦想步履不停的你",
-                //"世界因你而更加美丽",
-                //"生命不息劳动不止",
-                //"今天要放纵自己睡个懒觉",
-                //"劳动节一起鼓足干劲",
-                //"劳动节力争上游",
-                //"劳动节劳动能一夜暴富吗",
-                //"劳动节我要躺五天",
-                //"劳动节大家准备去哪里玩",
-                //"劳动节天道酬勤",
-                //"劳动节不负光阴",
-                //"劳动节放三2见",
-                //"劳动节轻松找快乐"
-                ];
+            "夏天到啦",
+            "轻风启夏热忱满载",
+            "芳菲歇去何须恨",
+            "夏木阴阴正可人",
+            "暮春作别初夏相迎",
+            "四时流转万物并秀",
+            "初夏予你清风",
+            "愿你心随流云自在悠扬",
+            "让欢愉似莲叶舒展",
+            "让福气如繁星满窗",
+            "愿每个日子都奔涌希望",
+            "愿你在绿荫蝉鸣里拾得整季清欢",
+            "槐荫初密夏意渐浓",
+            "推窗可摘青梅嗅",
+            "午后闲听竹簟幽",
+            "夕照染霞烹茶饮",
+            "夜揽流萤入画轴",
+            "春笺未干续夏章",
+            "告别春日的慵懒",
+            "点燃夏日的热情",
+            "以梦为马不负时光",
+            "夏日的风吹来了夏天的消息",
+            "夏日的雨滋润了希望的萌芽",
+            "愿你如夏日的骄阳充满能量",
+            "如绽放的荷花清新脱俗",
+            "烦恼在夏日的热浪中消散",
+            "幸福在季节的变换中沉淀",
+            "带着春的希望拥抱夏的热忱",
+            "心中有清凉",
+            "眼里有光芒",
+            "晨起迎朝阳",
+            "暮归伴星光",
+            "如禾苗般拔节生长",
+            "如向日葵般追逐阳光",
+            "祝你盛夏有闲趣",
+            "好运如阳光般照耀你",
+            "快乐如清风般环绕你",
+            "健康如云朵般庇护你",
+            "快雨知春尽",
+            "鸣禽觉夏初",
+            "日高槐影直",
+            "风细竹声疏",
+            "四月清和雨乍晴",
+            "南山当户转分明",
+            "更无柳絮因风起",
+            "惟有葵花向日倾",
+            "谢却海棠飞尽絮",
+            "困人天气日初长",
+            "一枝斜插蓝罗扇",
+            "摇动时时送好香"
+        ];
         let count = 0;
         let EvEntLists = [];
-        
 
         function copyTextToClipboard(textContent) {
             const input = document.createElement('input');
@@ -444,155 +316,110 @@
             }, 1500);
         }
 
-        function lazyCopyMode(){
+        function lazyCopyMode() {
             let hageRoot = document.querySelector('containter');
             let contentDivs = document.getElementsByClassName('bubble');
             for (let i = 0; i < contentDivs.length; i++) {
-              // 把所有p元素的内容改成 发送+序号
-              contentDivs[i].querySelector('p').textContent = `发送${i+1}`;
-              // 让所有泡泡变得更小，使得页面能够容下更多泡泡
-              contentDivs[i].style.width = '75px';
-              contentDivs[i].style.height = '75px';
+                contentDivs[i].querySelector('p').textContent = `发送${i + 1}`;
+                contentDivs[i].style.width = '75px';
+                contentDivs[i].style.height = '75px';
             }
-            let SerialNumbers = [];0
-            // 重新添加点击事件监听，点击 发送+序号 按钮，将序号记录到数组中
+            let SerialNumbers = [];
             for (let i = 0; i < contentDivs.length; i++) {
-              contentDivs[i].removeEventListener('click', EvEntLists[i]);
-              contentDivs[i].addEventListener('click', () => {
-                SerialNumbers.push(i);
+                contentDivs[i].removeEventListener('click', EvEntLists[i]);
+                contentDivs[i].addEventListener('click', () => {
+                    SerialNumbers.push(i);
 
-                // 向用户提示
-                document.body.innerHTML += `<p class="prompt">发送${SerialNumbers[isterminal]+1}</p>`;
+                    document.body.innerHTML += `<p class="prompt">发送${SerialNumbers.length}</p>`;
 
-                // 移除提示
-                setTimeout(() => {
-                    document.body.querySelector('.prompt').remove();
+                    setTimeout(() => {
+                        document.body.querySelector('.prompt').remove();
                     }, 1500);
-              });
+                });
             }
 
             let buttonText = ['开始/重新开始发送', '暂停发送', '继续发送', '停止发送'];
             let buttonElement = [];
             for (let i = 0; i < buttonText.length; i++) {
-                // 添加新的泡泡，充当按钮
                 const newBubble = document.createElement('div');
                 newBubble.className = 'bubble';
-
-                // 添加段落，显示按钮文字
                 newBubble.innerHTML = `<p>${buttonText[i]}</p>`;
-
                 contentDivs[0].insertAdjacentElement('beforebegin', newBubble);
                 buttonElement.push(newBubble);
             }
 
             let timers = [];
             let isSending = [];
-            // 点击 开始/重新开始发送 按钮
             buttonElement[0].addEventListener('click', () => {
-                // 开始向剪贴板发送泡泡内容，设定定时器，每隔10s发送一个泡泡
                 for (let i = 0; i < SerialNumbers.length; i++) {
                     const currentContent = copycontent[SerialNumbers[i]];
                     const isterminal = i;
-                    timers[i] = setTimeout(async () => { 
-                        await copyTextToClipboard(currentContent); 
-                        isSending[isterminal] = true; // 标记该泡泡发送完成
+                    timers[i] = setTimeout(async () => {
+                        await copyTextToClipboard(currentContent);
+                        isSending[isterminal] = true;
 
-                        // 发送完毕时，向用户提示发送成功
                         document.body.innerHTML += `
-                            <p class="prompt">第${SerialNumbers[isterminal]+1}条消息已复制到剪贴板</p>`;
+                            <p class="prompt">第${SerialNumbers[isterminal] + 1}条消息已复制到剪贴板</p>`;
 
-                        // 移除提示
                         setTimeout(() => {
                             document.body.querySelector('.prompt').remove();
                         }, 1500);
                     }, 1000 + i * 10000);
                 }
             });
-            // 点击 暂停发送 按钮
             buttonElement[1].addEventListener('click', () => {
                 for (let i = 0; i < timers.length; i++) {
                     clearTimeout(timers[i]);
                 }
             });
-
-            // 点击 继续发送 按钮
             buttonElement[2].addEventListener('click', () => {
                 for (let i = 0; i < SerialNumbers.length; i++) {
                     if (!isSending[i]) {
                         const currentContent = copycontent[SerialNumbers[i]];
                         const isterminal = i;
-                        timers[i] = setTimeout(async () => { 
-                            await copyTextToClipboard(currentContent); 
-                            isSending[isterminal] = true; // 标记该泡泡发送完成
+                        timers[i] = setTimeout(async () => {
+                            await copyTextToClipboard(currentContent);
+                            isSending[isterminal] = true;
 
-                            // 发送完毕时，向用户提示发送成功
                             document.body.innerHTML += `
-                                <p class="prompt">第${SerialNumbers[isterminal]+1}条消息已复制到剪贴板</p>`;
+                                <p class="prompt">第${SerialNumbers[isterminal] + 1}条消息已复制到剪贴板</p>`;
 
-                            // 移除提示
                             setTimeout(() => {
                                 document.body.querySelector('.prompt').remove();
-                                }, 1500);
+                            }, 1500);
                         }, 1000 + i * 10000);
                     }
                 }
             });
-
-            // 点击 停止发送 按钮
             buttonElement[3].addEventListener('click', () => {
                 for (let i = 0; i < timers.length; i++) {
                     clearTimeout(timers[i]);
-                    isSending[i] = false; // TODO: 停止发送后，还需要将isSending数组清空
+                    isSending[i] = false;
                 }
             });
-
         }
-
-        // let crumbLists = document.getElementsByClassName('crumb');
-
-        // crumbLists[0].style.backgroundColor = 'darkgray';
-        // crumbLists[0].addEventListener('click', () => {
-        //   crumbLists[0].style.backgroundColor = 'darkgray';
-        //   crumbLists[1].style.backgroundColor = '';
-        // });
-        // crumbLists[1].addEventListener('click', () => {
-        //   crumbLists[0].style.backgroundColor = '';
-        //   crumbLists[1].style.backgroundColor = 'darkgray';
-        //   lazyCopyMode();
-        // });
 
         document.querySelectorAll('.bubble').forEach(bubble => {
             const currentContent = copycontent[count];
             EvEntLists.push(function () {
                 copyTextToClipboard(currentContent);
 
-                // 生成12个水珠碎片
                 for (let i = 0; i < 12; i++) {
                     const debris = document.createElement('div');
                     debris.className = 'debris';
-
-                    // 设置随机运动参数
                     debris.style.setProperty('--x', Math.random());
                     debris.style.setProperty('--y', Math.random());
-                    // 替换原来的left/top设置代码
                     const rect = bubble.getBoundingClientRect();
                     const bubbleCenterX = rect.left + rect.width / 2;
                     const bubbleCenterY = rect.top + rect.height / 2;
-
                     debris.style.left = `${bubbleCenterX}px`;
                     debris.style.top = `${bubbleCenterY}px`;
-
-
-                    // 添加碎片到容器
                     document.body.appendChild(debris);
-
-                    // 自动移除碎片
                     debris.addEventListener('animationend', () => {
                         debris.remove();
                     });
                 }
 
-                // 模拟泡泡扩散效果
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
                         const _scale = 1 + i * 0.2;
@@ -602,7 +429,6 @@
                     }, i * 100);
                 }
 
-                // 移除泡泡，文字正常显示
                 setTimeout(() => {
                     this.style.visibility = 'hidden';
                     this.style.opacity = 1;
