@@ -8,6 +8,8 @@
     <!-- 禁用系统深色模式 -->
     <meta name="color-scheme" content="light">
     <title>短语复制工具</title>
+    <!-- 引入霞鹜文楷（通过CDNJS） -->
+    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css" rel="stylesheet">
     <style>
         nav {
             position: relative;
@@ -99,13 +101,15 @@
 
         .bubble p {
             visibility: visible;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -75%);
+            position: relative;
+            top: 25%;
+            /* 霞鹜文楷（通过CDNJS） */
+            font-family: "LXGW WenKai", serif;
             font-size: 1em;
             color: #fff;
             text-align: center;
+            justify-content: center;
+            align-items: center;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -149,15 +153,28 @@
 
         .prompt {
             position: fixed;
+            width: 100%;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            font-weight: bold;
+            font-family: "LXGW WenKai", serif;
             font-size: 1em;
             color: white;
             background-color: darkgray;
             text-align: center;
+            justify-content: center;
+            align-items: center;
             animation: prompt-appear 1.5s ease-in-out forwards;
             pointer-events: none;
+            
+            /*让背景只在文字底下显示，如果文字设置为透明的，那就能透过文字，透过文字看到背景图片，这是一个能媲美PS效果的利器属性*/
+            /*-webkit-text-fill-color: transparent;
+            -moz-text-fill-color: transparent;
+            -ms-text-fill-color: transparent;
+            -webkit-background-clip: text; 
+            -moz-background-clip: text; 
+            -ms-background-clip: text; 
+            background-clip: text;*/
+
             z-index: 1000;
         }
 
@@ -240,157 +257,153 @@
         <div class="bubble"><p>56.红红的樱桃红红的枣</p> </div>
         <div class="bubble"><p>57.用艾叶把烦恼都赶跑</p> </div>
         <div class="bubble"><p>58.愿你拥有人间最美好最珍贵的一切</p> </div>
-        <div class="bubble"><p>59.</p> </div>
-        <div class="bubble"><p>60.</p> </div>
+        <div class="bubble"><p>59.五月初五恰逢端阳</p> </div>
+        <div class="bubble"><p>60.端午的祝福悄然而至</p> </div>
         <div class="bubble"><p>61.小小的粽子里藏着我最真的心意</p> </div>
-        <div class="bubble"><p>62.愿你平安喜乐条</p> </div>
-        <div class="bubble"><p>63.</p> </div>
-        <div class="bubble"><p>64.</p> </div>
+        <div class="bubble"><p>62.愿你平安喜乐</p> </div>
+        <div class="bubble"><p>63.在江面的龙舟上再续永恒的主题</p> </div>
+        <div class="bubble"><p>64.相比粽子的甜咸我在意的是假期的长短条查看祝福</p> </div>
         <div class="bubble"><p>65.</p> </div>
         <div class="bubble"><p>66.一层层的粽叶包裹的都是生活的香甜</p> </div>
         <div class="bubble"><p>67.整个六月都飘着艾叶配粽子的香气</p> </div>
-        <div class="bubble"><p>68.我永远支持甜粽条</p> </div>
-        <div class="bubble"><p>69.</p> </div>
+        <div class="bubble"><p>68.我永远支持甜粽</p> </div>
+        <div class="bubble"><p>69.没什么好说的粽子就该是咸的</p> </div>
         <div class="bubble"><p>70.</p> </div>
         <div class="bubble"><p>71.甜的咸的其实都行</p> </div>
-        <div class="bubble"><p>73.</p> </div>
-        <div class="bubble"><p>74.</p> </div>
-        <div class="bubble"><p>75.</p> </div>
-        <div class="bubble"><p>76.</p> </div>
+        <div class="bubble"><p>72.让我们一起干了这杯雄黄酒</p> </div>
+        <div class="bubble"><p>73.这枚香袋是我亲手做的</p> </div>
+        <div class="bubble"><p>74.用千娇百媚的芭蕉叶把你轻轻包裹</p> </div>
+        <div class="bubble"><p>75.让纸鸢带着我的祝福飞向你</p> </div>
+        <div class="bubble"><p>76.挂着彩绳放风筝是端午最开心的事了</p> </div>
         <div class="bubble"><p>77.平安吉祥端午安康</p> </div>
         <div class="bubble"><p>78.艾蒿高高门前舞</p> </div>
         <div class="bubble"><p>79.苇叶和糯米也包含着对屈原的无限敬意</p> </div>
-        <div class="bubble"><p>80.路漫漫其修远兮条</p> </div>
+        <div class="bubble"><p>80.路漫漫其修远兮</p> </div>
         <div class="bubble"><p>81.吾将上下而求索</p> </div>
-        <div class="bubble"><p>82.</p> </div>
-        <div class="bubble"><p>83.</p> </div>
-        <div class="bubble"><p>84.</p> </div>
-        <div class="bubble"><p>85.</p> </div>
-        <div class="bubble"><p>86.</p> </div>
+        <div class="bubble"><p>82.吃粽子的同时也要记得驱五毒哦</p> </div>
+        <div class="bubble"><p>83.万人齐赛龙舟真是再壮观不过了</p> </div>
+        <div class="bubble"><p>84.这五彩的丝线缠着的是我的无尽牵挂</p> </div>
+        <div class="bubble"><p>85.我可是最棒的龙舟手</p> </div>
+        <div class="bubble"><p>86.希望你的六月有西瓜的清凉</p> </div>
         <div class="bubble"><p>87.</p> </div>
-        <div class="bubble"><p>88.</p> </div>
-        <div class="bubble"><p>89.</p> </div>
-        <div class="bubble"><p>90.</p> </div>
-        <div class="bubble"><p>91.</p> </div>
-        <div class="bubble"><p>92.</p> </div>
-        <div class="bubble"><p>93.</p> </div>
-        <div class="bubble"><p>94.</p> </div>
-        <div class="bubble"><p>95.</p> </div>
-        <div class="bubble"><p>96.</p> </div>
-        <div class="bubble"><p>97.</p> </div>
-        <div class="bubble"><p>98.</p> </div>
-        <div class="bubble"><p>99.</p> </div>
+        <div class="bubble"><p>88.希望六月能善待你</p> </div>
+        <div class="bubble"><p>89.一株暗香四溢的艾草传递着我的情意</p> </div>
+        <div class="bubble"><p>90.端午假期能见到你才是最幸福的事</p> </div>
+        <div class="bubble"><p>91.粽子和我的爱意一样都是甜的</p> </div>
+        <div class="bubble"><p>92.清润端阳节</p> </div>
+        <div class="bubble"><p>93.茅檐插艾新</p> </div>
+        <div class="bubble"><p>94.浴包粽念忠臣</p> </div>
+        <div class="bubble"><p>95.千古不亡湘水身</p> </div>
+        <div class="bubble"><p>96.甜的咸的我都吃</p> </div>
+        <div class="bubble"><p>97.咸蛋黄遇见白糯米</p> </div>
+        <div class="bubble"><p>98.幸运的我遇见最好的你</p> </div>
+        <div class="bubble"><p>99.我从咸粽区来看甜粽区的你</p> </div>
         <div class="bubble"><p>100.</p> </div>
     </div>
 
     <script>
         let copycontent = [
-                "祝大家端午安康",
-                "香囊寄思",
-                "粽子飘香",
-                "万树千山粽是情",
-                "送你一颗好运粽",
-                "五月五赛龙舟",
-                "好的东西就需要分享",
-                "愿幸福的粽叶裹住你",
-                "送你一只香甜粽子",
-                "想拉着你的手一起看龙舟",
-                "禁止端午节不理我",
-                "今年送你的粽子不一般",
-                "祝你端午吉祥如意",
-                "希望你粽是幸运",
-                "蒲月初五是端午",
-                "青绿的粽叶包裹浓浓的真情",
-                "五色的丝线迎风飞舞",
-                "五色新丝缠角粽",
-                "汨罗江在诉说着一段神奇的故事",
-                "又是佳节好时光",
-                "热烈龙舟划动着千年的祈愿",
-                "愿你品尝出人生的夸姣和蒲月五的情怀",
-                "吃的是粽子甜的是生活",
-                "长长丝线绑健康",
-                "六月的轻风飘来淡淡的粽香",
-                "甜甜粽馅溢飘香",
-                "希望祝福能随着艾叶的淡淡清香飘到你那里",
-                "赛舟驰骋处处祥",
-                "汨罗江在诉说着一段传奇的故事",
-                "五月端午粽糕飘香",
-                "粽叶艾草继续着不变的清香",
-                "投粽江河喂鱼以祭屈原",
-                "片片艾叶片片情",
-                "温婉甜粽在线打call",
-                "咸甜之争烽烟再起",
-                "只有油润不腻味道香甜的肉粽才是王道",
-                "深红色的咸肉泛着油光",
-                "咬上一口仿佛时间都静",
-                "还有鲜香无比的蛋黄肉粽",
-                "丰富的口感让我欲罢不能",
-                "肉粽知道灵魂的去处",
-                "肉粽党发言完毕",
-                "清清爽爽的甜粽才是人间值得",
-                "雪白的糯米包着甜甜的蜜枣",
-                "一定要让粽子在凉水里冷静一下",
-                "粘上点白糖就更绝了",
-                "白糖会使糯米更加的香甜弹牙",
-                "那种幸福从脚尖直冲到天灵盖的感觉",
-                "永生都难以忘记",
-                "甜粽党发言完毕条",
-                "到底是甜粽还是咸粽呢",
-                "我觉得你要比粽子甜上那么一点",
-                "乘着龙舟给你捎来端午的问候",
-                "清香的叶子层层叠叠",
-                "祝你健康平安过个清清凉凉的夏天",
-                "红红的樱桃红红的枣",
-                "用艾叶把烦恼都赶跑",
-                "愿你拥有人间最美好最珍贵的一切",
-                "",
-                "",
-                "小小的粽子里藏着我最真的心意",
-                "愿你平安喜乐条",
-                "",
-                "",
-                "",
-                "一层层的粽叶包裹的都是生活的香甜",
-                "整个六月都飘着艾叶配粽子的香气",
-                "我永远支持甜粽条",
-                "",
-                "",
-                "甜的咸的其实都行",
-                "",
-                "",
-                "",
-                "",
-                "平安吉祥端午安康",
-                "艾蒿高高门前舞",
-                "苇叶和糯米也包含着对屈原的无限敬意",
-                "路漫漫其修远兮条",
-                "吾将上下而求索",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-            ];
+            "祝大家端午安康",
+            "香囊寄思",
+            "粽子飘香",
+            "万树千山粽是情",
+            "送你一颗好运粽",
+            "五月五赛龙舟",
+            "好的东西就需要分享",
+            "愿幸福的粽叶裹住你",
+            "送你一只香甜粽子",
+            "想拉着你的手一起看龙舟",
+            "禁止端午节不理我",
+            "今年送你的粽子不一般",
+            "祝你端午吉祥如意",
+            "希望你粽是幸运",
+            "蒲月初五是端午",
+            "青绿的粽叶包裹浓浓的真情",
+            "五色的丝线迎风飞舞",
+            "五色新丝缠角粽",
+            "汨罗江在诉说着一段神奇的故事",
+            "又是佳节好时光",
+            "热烈龙舟划动着千年的祈愿",
+            "愿你品尝出人生的夸姣和蒲月五的情怀",
+            "吃的是粽子甜的是生活",
+            "长长丝线绑健康",
+            "六月的轻风飘来淡淡的粽香",
+            "甜甜粽馅溢飘香",
+            "希望祝福能随着艾叶的淡淡清香飘到你那里",
+            "赛舟驰骋处处祥",
+            "汨罗江在诉说着一段传奇的故事",
+            "五月端午粽糕飘香",
+            "粽叶艾草继续着不变的清香",
+            "投粽江河喂鱼以祭屈原",
+            "片片艾叶片片情",
+            "温婉甜粽在线打call",
+            "咸甜之争烽烟再起",
+            "只有油润不腻味道香甜的肉粽才是王道",
+            "深红色的咸肉泛着油光",
+            "咬上一口仿佛时间都静",
+            "还有鲜香无比的蛋黄肉粽",
+            "丰富的口感让我欲罢不能",
+            "肉粽知道灵魂的去处",
+            "肉粽党发言完毕",
+            "清清爽爽的甜粽才是人间值得",
+            "雪白的糯米包着甜甜的蜜枣",
+            "一定要让粽子在凉水里冷静一下",
+            "粘上点白糖就更绝了",
+            "白糖会使糯米更加的香甜弹牙",
+            "那种幸福从脚尖直冲到天灵盖的感觉",
+            "永生都难以忘记",
+            "甜粽党发言完毕条",
+            "到底是甜粽还是咸粽呢",
+            "我觉得你要比粽子甜上那么一点",
+            "乘着龙舟给你捎来端午的问候",
+            "清香的叶子层层叠叠",
+            "祝你健康平安过个清清凉凉的夏天",
+            "红红的樱桃红红的枣",
+            "用艾叶把烦恼都赶跑",
+            "愿你拥有人间最美好最珍贵的一切",
+            "五月初五恰逢端阳",
+            "端午的祝福悄然而至",
+            "小小的粽子里藏着我最真的心意",
+            "愿你平安喜乐",
+            "在江面的龙舟上再续永恒的主题",
+            "相比粽子的甜咸我在意的是假期的长短条查看祝福",
+            "",
+            "一层层的粽叶包裹的都是生活的香甜",
+            "整个六月都飘着艾叶配粽子的香气",
+            "我永远支持甜粽",
+            "没什么好说的粽子就该是咸的",
+            "",
+            "甜的咸的其实都行",
+            "让我们一起干了这杯雄黄酒",
+            "这枚香袋是我亲手做的",
+            "用千娇百媚的芭蕉叶把你轻轻包裹",
+            "让纸鸢带着我的祝福飞向你",
+            "挂着彩绳放风筝是端午最开心的事了",
+            "平安吉祥端午安康",
+            "艾蒿高高门前舞",
+            "苇叶和糯米也包含着对屈原的无限敬意",
+            "路漫漫其修远兮",
+            "吾将上下而求索",
+            "吃粽子的同时也要记得驱五毒哦",
+            "万人齐赛龙舟真是再壮观不过了",
+            "这五彩的丝线缠着的是我的无尽牵挂",
+            "我可是最棒的龙舟手",
+            "希望你的六月有西瓜的清凉",
+            "",
+            "希望六月能善待你",
+            "一株暗香四溢的艾草传递着我的情意",
+            "端午假期能见到你才是最幸福的事",
+            "粽子和我的爱意一样都是甜的",
+            "清润端阳节",
+            "茅檐插艾新",
+            "浴包粽念忠臣",
+            "千古不亡湘水身",
+            "甜的咸的我都吃",
+            "咸蛋黄遇见白糯米",
+            "幸运的我遇见最好的你",
+            "我从咸粽区来看甜粽区的你",
+            "",
+        ];
         let count = 0;
         let EvEntLists = [];
 
@@ -405,7 +418,7 @@
             document.body.removeChild(input);
 
             let propmt = document.createElement('p');
-            propmt.textContent = '已复制到剪贴板';
+            propmt.textContent = '已复制到剪贴板!';
             propmt.classList.add('prompt');
             document.body.appendChild(propmt);
 
@@ -457,7 +470,7 @@
                         isSending[isterminal] = true;
 
                         document.body.innerHTML += `
-                            <p class="prompt">第${SerialNumbers[isterminal] + 1}条消息已复制到剪贴板</p>`;
+                                <p class="prompt">第${SerialNumbers[isterminal] + 1}条消息已复制到剪贴板</p>`;
 
                         setTimeout(() => {
                             document.body.querySelector('.prompt').remove();
@@ -480,7 +493,7 @@
                             isSending[isterminal] = true;
 
                             document.body.innerHTML += `
-                                <p class="prompt">第${SerialNumbers[isterminal] + 1}条消息已复制到剪贴板</p>`;
+                                    <p class="prompt">第${SerialNumbers[isterminal] + 1}条消息已复制到剪贴板</p>`;
 
                             setTimeout(() => {
                                 document.body.querySelector('.prompt').remove();
